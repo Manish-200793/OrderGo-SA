@@ -20,13 +20,17 @@ $currentScript = basename($_SERVER['SCRIPT_NAME'] ?? '');
 
     <!-- Navigation Links -->
     <div class="navbar-links">
-      <a href="<?= ROOT_PATH ?>/index.php" class="nav-link <?= $currentScript === 'index.php' ? 'active' : '' ?>">
-        <i data-lucide="home" style="width: 16px; height: 16px;"></i> Home
-      </a>
+      <?php if (!$user || ($user['role'] !== 'staff' && $user['role'] !== 'admin')): ?>
+        <a href="<?= ROOT_PATH ?>/index.php" class="nav-link <?= $currentScript === 'index.php' ? 'active' : '' ?>">
+          <i data-lucide="home" style="width: 16px; height: 16px;"></i> Home
+        </a>
+      <?php endif; ?>
 
-      <a href="<?= ROOT_PATH ?>/menu.php" class="nav-link <?= $currentScript === 'menu.php' ? 'active' : '' ?>">
-        <i data-lucide="book-open" style="width: 16px; height: 16px;"></i> Menu
-      </a>
+      <?php if (!$user || $user['role'] !== 'staff'): ?>
+        <a href="<?= ROOT_PATH ?>/menu.php" class="nav-link <?= $currentScript === 'menu.php' ? 'active' : '' ?>">
+          <i data-lucide="book-open" style="width: 16px; height: 16px;"></i> Menu
+        </a>
+      <?php endif; ?>
 
       <?php if ($user && ($user['role'] === 'staff' || $user['role'] === 'admin')): ?>
         <a href="<?= ROOT_PATH ?>/staff/index.php" class="nav-link nav-link-admin <?= str_contains($_SERVER['SCRIPT_NAME'], '/staff/') ? 'active' : '' ?>">
@@ -40,15 +44,14 @@ $currentScript = basename($_SERVER['SCRIPT_NAME'] ?? '');
         </a>
       <?php endif; ?>
 
-      <a href="<?= ROOT_PATH ?>/queue.php" target="_blank" class="nav-link" title="Open TV Queue Board">
-        <i data-lucide="tv" style="width: 16px; height: 16px;"></i> TV Queue
-      </a>
 
       <!-- Cart -->
-      <a href="<?= ROOT_PATH ?>/cart.php" class="nav-link cart-link <?= $currentScript === 'cart.php' ? 'active' : '' ?>">
-        <i data-lucide="shopping-bag" style="width: 18px; height: 18px;"></i> Cart
-        <span class="cart-badge" style="display: none;">0</span>
-      </a>
+      <?php if (!$user || ($user['role'] !== 'staff' && $user['role'] !== 'admin')): ?>
+        <a href="<?= ROOT_PATH ?>/cart.php" class="nav-link cart-link <?= $currentScript === 'cart.php' ? 'active' : '' ?>">
+          <i data-lucide="shopping-bag" style="width: 18px; height: 18px;"></i> Cart
+          <span class="cart-badge" style="display: none;">0</span>
+        </a>
+      <?php endif; ?>
 
       <!-- Theme Toggle -->
       <button class="nav-link" onclick="toggleTheme()" title="Toggle Dark/Light Mode" style="border:none; background:none; cursor:pointer;">
@@ -58,9 +61,19 @@ $currentScript = basename($_SERVER['SCRIPT_NAME'] ?? '');
 
       <!-- Auth Section -->
       <?php if ($user): ?>
-        <a href="<?= ROOT_PATH ?>/orders.php" class="nav-link <?= $currentScript === 'orders.php' ? 'active' : '' ?>">
-          <i data-lucide="clock" style="width: 16px; height: 16px;"></i> Orders
-        </a>
+        <?php if ($user['role'] === 'staff'): ?>
+          <a href="<?= ROOT_PATH ?>/staff/orders.php" class="nav-link <?= $currentScript === 'orders.php' ? 'active' : '' ?>">
+            <i data-lucide="list-ordered" style="width: 16px; height: 16px;"></i> Orders
+          </a>
+        <?php elseif ($user['role'] === 'admin'): ?>
+          <a href="<?= ROOT_PATH ?>/admin/orders.php" class="nav-link <?= $currentScript === 'orders.php' ? 'active' : '' ?>">
+            <i data-lucide="list-ordered" style="width: 16px; height: 16px;"></i> Orders
+          </a>
+        <?php else: ?>
+          <a href="<?= ROOT_PATH ?>/orders.php" class="nav-link <?= $currentScript === 'orders.php' ? 'active' : '' ?>">
+            <i data-lucide="clock" style="width: 16px; height: 16px;"></i> Orders
+          </a>
+        <?php endif; ?>
 
         <div class="nav-user">
           <a href="<?= ROOT_PATH ?>/profile.php" class="nav-link <?= $currentScript === 'profile.php' ? 'active' : '' ?>" title="User Profile">
@@ -80,6 +93,59 @@ $currentScript = basename($_SERVER['SCRIPT_NAME'] ?? '');
     </div>
   </div>
 </nav>
+
+<!-- Mobile Bottom Navigation (Zomato Style) -->
+<nav class="bottom-nav">
+  <?php if (!$user || ($user['role'] !== 'staff' && $user['role'] !== 'admin')): ?>
+    <a href="<?= ROOT_PATH ?>/index.php" class="bottom-nav-item <?= $currentScript === 'index.php' ? 'active' : '' ?>">
+      <i data-lucide="home"></i>
+      <span>Home</span>
+    </a>
+  <?php endif; ?>
+  
+  <?php if (!$user || $user['role'] !== 'staff'): ?>
+    <a href="<?= ROOT_PATH ?>/menu.php" class="bottom-nav-item <?= $currentScript === 'menu.php' ? 'active' : '' ?>">
+      <i data-lucide="book-open"></i>
+      <span>Menu</span>
+    </a>
+  <?php endif; ?>
+  
+  <?php if (!$user || ($user['role'] !== 'staff' && $user['role'] !== 'admin')): ?>
+    <a href="<?= ROOT_PATH ?>/cart.php" class="bottom-nav-item cart-link <?= $currentScript === 'cart.php' ? 'active' : '' ?>">
+      <i data-lucide="shopping-bag"></i>
+      <span>Cart</span>
+      <span class="cart-badge" style="display: none;">0</span>
+    </a>
+  <?php endif; ?>
+  <?php if ($user): ?>
+    <?php if ($user['role'] === 'staff'): ?>
+      <a href="<?= ROOT_PATH ?>/staff/orders.php" class="bottom-nav-item <?= $currentScript === 'orders.php' ? 'active' : '' ?>">
+        <i data-lucide="list-ordered"></i>
+        <span>Orders</span>
+      </a>
+    <?php elseif ($user['role'] === 'admin'): ?>
+      <a href="<?= ROOT_PATH ?>/admin/orders.php" class="bottom-nav-item <?= $currentScript === 'orders.php' ? 'active' : '' ?>">
+        <i data-lucide="list-ordered"></i>
+        <span>Orders</span>
+      </a>
+    <?php else: ?>
+      <a href="<?= ROOT_PATH ?>/orders.php" class="bottom-nav-item <?= $currentScript === 'orders.php' ? 'active' : '' ?>">
+        <i data-lucide="clock"></i>
+        <span>Orders</span>
+      </a>
+    <?php endif; ?>
+    <a href="<?= ROOT_PATH ?>/profile.php" class="bottom-nav-item <?= $currentScript === 'profile.php' ? 'active' : '' ?>">
+      <i data-lucide="user"></i>
+      <span>Profile</span>
+    </a>
+  <?php else: ?>
+    <a href="<?= ROOT_PATH ?>/login.php" class="bottom-nav-item">
+      <i data-lucide="log-in"></i>
+      <span>Login</span>
+    </a>
+  <?php endif; ?>
+</nav>
+
 
 <script>
 function toggleTheme() {

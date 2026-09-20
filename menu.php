@@ -27,12 +27,12 @@ $stmt = $db->query($sql);
 $menuItems = $stmt->fetchAll();
 
 $categories = [
-    'all'       => 'All Items',
-    'breakfast' => 'Breakfast',
-    'lunch'     => 'Lunch & Meals',
-    'snacks'    => 'Snacks',
-    'beverages' => 'Beverages',
-    'desserts'  => 'Desserts',
+    'all'       => '🍲 All',
+    'breakfast' => '🌅 Breakfast',
+    'lunch'     => '🍛 Lunch',
+    'snacks'    => '🍿 Snacks',
+    'beverages' => '☕ Beverages',
+    'desserts'  => '🍰 Desserts',
 ];
 
 $activeCat = $_GET['cat'] ?? 'all';
@@ -41,20 +41,32 @@ require __DIR__ . '/includes/header.php';
 ?>
 
 <div class="page container">
-  <div class="page-header" style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 1rem;">
-    <div>
-      <h1 class="page-title">Campus Cafeteria Menu</h1>
-      <p class="page-subtitle">Freshly prepared, hygiene-certified meals for students and campus staff</p>
-    </div>
-    <button class="btn btn-secondary btn-sm" onclick="openRouletteModal()">
-      🎲 Surprise Me (Budget Roulette)
-    </button>
+  <div class="page-header" style="margin-bottom: 2rem;">
+    <h1 class="page-title" style="font-size: 2.25rem; font-weight: 800; color: #0f172a; margin-bottom: 0.5rem;">Our Menu</h1>
+    <p class="page-subtitle" style="color: #64748b; font-size: 1.1rem;">Fresh, delicious food made with love</p>
   </div>
+
+  <?php if (!is_logged_in()): ?>
+  <!-- Guest Banner -->
+  <div class="guest-banner">
+    <div class="guest-banner-left">
+      <div class="guest-icon"><i data-lucide="utensils" style="width: 24px; height: 24px;"></i></div>
+      <div>
+        <h3 class="guest-title">Browsing as Guest</h3>
+        <p class="guest-text">Sign in or create an account to view prices, customize items, and place orders.</p>
+      </div>
+    </div>
+    <div class="guest-buttons">
+      <a href="<?= ROOT_PATH ?>/login.php" class="btn-guest-login"><i data-lucide="log-in" style="width: 16px; height: 16px;"></i> Login</a>
+      <a href="<?= ROOT_PATH ?>/register.php" class="btn-guest-signup"><i data-lucide="user-plus" style="width: 16px; height: 16px;"></i> Sign Up</a>
+    </div>
+  </div>
+  <?php endif; ?>
 
   <!-- Search Bar -->
   <div class="menu-search-bar">
     <i data-lucide="search" class="search-icon" style="width: 20px; height: 20px;"></i>
-    <input type="text" id="menu-search" class="search-input" placeholder="Search by food name, category, or ingredients..." oninput="filterMenuItems()">
+    <input type="text" id="menu-search" class="search-input" placeholder="Search for dishes..." oninput="filterMenuItems()">
   </div>
 
   <!-- Category Filter Tabs -->
@@ -65,6 +77,11 @@ require __DIR__ . '/includes/header.php';
       </button>
     <?php endforeach; ?>
   </div>
+
+  <!-- Section Title -->
+  <h2 style="font-size: 1.25rem; font-weight: 700; color: #0f172a; margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.5rem;">
+    <i data-lucide="sparkles" style="width: 20px; height: 20px;"></i> Recommended For You
+  </h2>
 
   <!-- Menu Items Grid -->
   <div class="menu-grid" id="menu-grid-container">
@@ -81,7 +98,7 @@ require __DIR__ . '/includes/header.php';
            data-desc="<?= htmlspecialchars(strtolower($item['description'])) ?>">
         
         <?php if ($item['is_daily_special']): ?>
-          <span class="badge badge-special menu-card-badge">⭐ Special</span>
+          <span class="badge badge-special menu-card-badge">⭐ TODAY'S SPECIAL</span>
         <?php endif; ?>
 
         <div class="menu-card-image" onclick="openItemModal(<?= htmlspecialchars(json_encode($item)) ?>)">
@@ -96,7 +113,9 @@ require __DIR__ . '/includes/header.php';
             <h3 class="menu-card-name" onclick="openItemModal(<?= htmlspecialchars(json_encode($item)) ?>)">
               <?= htmlspecialchars($item['name']) ?>
             </h3>
-            <span class="menu-card-price"><?= format_price($item['price']) ?></span>
+            <?php if (is_logged_in()): ?>
+              <span class="menu-card-price"><?= format_price($item['price']) ?></span>
+            <?php endif; ?>
           </div>
 
           <p class="menu-card-desc"><?= htmlspecialchars($item['description']) ?></p>
@@ -112,17 +131,25 @@ require __DIR__ . '/includes/header.php';
 
           <div class="menu-card-actions">
             <?php if (!$isSoldOut): ?>
-              <button class="btn btn-primary btn-sm w-full btn-add-cart" 
-                      onclick="Cart.addItem({item_id: <?= $item['item_id'] ?>, name: '<?= addslashes($item['name']) ?>', price: <?= $item['price'] ?>, image_url: '<?= addslashes($imgUrl) ?>'})">
-                <i data-lucide="plus"></i> Add to Cart
-              </button>
-              <div class="quantity-control" style="display: none;">
-                <button class="qty-btn" onclick="Cart.updateQuantity(<?= $item['item_id'] ?>, (Cart.getItems().find(i => i.item_id === <?= $item['item_id'] ?>)?.quantity || 1) - 1)">-</button>
-                <span class="qty-value">1</span>
-                <button class="qty-btn" onclick="Cart.updateQuantity(<?= $item['item_id'] ?>, (Cart.getItems().find(i => i.item_id === <?= $item['item_id'] ?>)?.quantity || 0) + 1)">+</button>
-              </div>
+              <?php $u = current_user(); if ($u && !in_array($u['role'], ['admin', 'staff'])): ?>
+                <button class="btn-add-cart" 
+                        onclick="Cart.addItem({item_id: <?= $item['item_id'] ?>, name: '<?= addslashes($item['name']) ?>', price: <?= $item['price'] ?>, image_url: '<?= addslashes($imgUrl) ?>'})">
+                  <span class="show-on-mobile">ADD</span>
+                  <span class="hide-on-mobile"><i data-lucide="plus" style="width:16px;height:16px;vertical-align:middle;"></i> Add to Cart</span>
+                </button>
+                <div class="quantity-control" style="display: none;">
+                  <button class="qty-btn" onclick="Cart.updateQuantity(<?= $item['item_id'] ?>, (Cart.getItems().find(i => i.item_id === <?= $item['item_id'] ?>)?.quantity || 1) - 1)">-</button>
+                  <span class="qty-value">1</span>
+                  <button class="qty-btn" onclick="Cart.updateQuantity(<?= $item['item_id'] ?>, (Cart.getItems().find(i => i.item_id === <?= $item['item_id'] ?>)?.quantity || 0) + 1)">+</button>
+                </div>
+              <?php elseif (!$u): ?>
+                <a href="<?= ROOT_PATH ?>/login.php" class="btn-login-order">
+                  <span class="show-on-mobile">ADD</span>
+                  <span class="hide-on-mobile"><i data-lucide="log-in" style="width:16px;height:16px;vertical-align:middle;"></i> Login to Order</span>
+                </a>
+              <?php endif; ?>
             <?php else: ?>
-              <button class="btn btn-secondary btn-sm w-full" disabled>Out of Stock</button>
+              <button class="btn btn-secondary btn-sm w-full" disabled style="opacity: 0.7; cursor: not-allowed; border-radius: 8px;">Out of Stock</button>
             <?php endif; ?>
           </div>
         </div>
@@ -130,6 +157,11 @@ require __DIR__ . '/includes/header.php';
     <?php endforeach; ?>
   </div>
 </div>
+
+<!-- Floating Surprise Me Button -->
+<button class="floating-roulette-btn" onclick="openRouletteModal()">
+  <i data-lucide="dices" style="width: 20px; height: 20px;"></i> Surprise Me!
+</button>
 
 <!-- Item Details & Reviews Modal -->
 <div class="modal-overlay" id="item-modal">
@@ -320,22 +352,78 @@ function spinRoulette() {
   resultDiv.innerHTML = '<div style="text-align: center; padding: 1rem;">🎲 Selecting best delicious combo...</div>';
 
   setTimeout(() => {
-    let combo = [];
-    let spent = 0;
-    const shuffled = [...avail].sort(() => 0.5 - Math.random());
+    // Categorize items
+    const mains = avail.filter(i => ['breakfast', 'lunch', 'snacks'].includes(i.category));
+    const bevs = avail.filter(i => i.category === 'beverages');
+    const desserts = avail.filter(i => i.category === 'desserts');
 
-    for (const item of shuffled) {
-      const price = parseFloat(item.price);
-      if (spent + price <= budget) {
-        combo.push(item);
-        spent += price;
-      }
+    let validCombos = [];
+
+    // 1. Try 3-item combos (Main + Beverage + Dessert)
+    mains.forEach(m => {
+      bevs.forEach(b => {
+        desserts.forEach(d => {
+          const total = parseFloat(m.price) + parseFloat(b.price) + parseFloat(d.price);
+          if (total <= budget) validCombos.push({ items: [m, b, d], total: total });
+        });
+      });
+    });
+
+    // 2. If no 3-item combo fits, try 2-item combos (Main + Bev OR Main + Dessert)
+    if (validCombos.length === 0) {
+      mains.forEach(m => {
+        bevs.forEach(b => {
+          const total = parseFloat(m.price) + parseFloat(b.price);
+          if (total <= budget) validCombos.push({ items: [m, b], total: total });
+        });
+        desserts.forEach(d => {
+          const total = parseFloat(m.price) + parseFloat(d.price);
+          if (total <= budget) validCombos.push({ items: [m, d], total: total });
+        });
+      });
     }
 
-    if (combo.length === 0) {
+    // 3. If still nothing fits, just find the best single Main Course
+    if (validCombos.length === 0) {
+      mains.forEach(m => {
+        const total = parseFloat(m.price);
+        if (total <= budget) validCombos.push({ items: [m], total: total });
+      });
+    }
+
+    if (validCombos.length === 0) {
       resultDiv.innerHTML = `<div style="color: #dc2626; padding: 1rem; text-align: center;">No items found within budget of ₹${budget}. Try increasing your budget!</div>`;
       return;
     }
+
+    // Sort valid combos by total price descending (closest to budget first)
+    validCombos.sort((a, b) => b.total - a.total);
+
+    // To guarantee the items change every spin, grab a large pool of the best combos
+    // Anything within ₹25 of the absolute best possible price, capped at 25 combos.
+    const bestPrice = validCombos[0].total;
+    const topCombos = validCombos.filter(c => c.total >= bestPrice - 25).slice(0, 25);
+    
+    // Prevent repeating the same items from the last spin
+    window.lastRouletteItems = window.lastRouletteItems || [];
+    
+    // Calculate how many items each combo shares with the last spin
+    topCombos.forEach(c => {
+      c.overlap = c.items.filter(i => window.lastRouletteItems.includes(i.item_id)).length;
+    });
+
+    // Sort by lowest overlap first to ensure maximum variety
+    topCombos.sort((a, b) => a.overlap - b.overlap);
+    const minOverlap = topCombos[0].overlap;
+    const bestFreshCombos = topCombos.filter(c => c.overlap === minOverlap);
+
+    // Pick randomly from the combos with the least overlap
+    const bestCombo = bestFreshCombos[Math.floor(Math.random() * bestFreshCombos.length)];
+    const combo = bestCombo.items;
+    const spent = bestCombo.total;
+    
+    // Save these items so we don't repeat them next time
+    window.lastRouletteItems = combo.map(i => i.item_id);
 
     resultDiv.innerHTML = `
       <div class="glass-card" style="padding: 1rem; border: 1.5px solid var(--accent-primary);">

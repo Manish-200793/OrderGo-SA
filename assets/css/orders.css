@@ -185,13 +185,13 @@
 }
 
 .kitchen-wait-card.state-pending {
-  background: linear-gradient(145deg, rgba(245, 158, 11, 0.1) 0%, rgba(15, 23, 42, 0.75) 100%);
+  background: linear-gradient(145deg, rgba(245, 158, 11, 0.1) 0%, var(--bg-card) 100%);
   border: 1.5px solid rgba(245, 158, 11, 0.4);
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25), 0 0 35px rgba(245, 158, 11, 0.12);
 }
 
 .kitchen-wait-card.state-preparing {
-  background: linear-gradient(145deg, rgba(59, 130, 246, 0.12) 0%, rgba(15, 23, 42, 0.75) 100%);
+  background: linear-gradient(145deg, rgba(59, 130, 246, 0.12) 0%, var(--bg-card) 100%);
   border: 1.5px solid rgba(59, 130, 246, 0.45);
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25), 0 0 35px rgba(59, 130, 246, 0.15);
 }
@@ -282,7 +282,7 @@
   display: flex;
   align-items: center;
   gap: 0.85rem;
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--bg-secondary);
   border: 1.5px dashed var(--border-accent);
   border-radius: var(--radius-lg);
   padding: 1rem 1.25rem;
@@ -343,7 +343,7 @@
   align-items: center;
   justify-content: center;
   padding: 2.75rem 1.75rem;
-  background: linear-gradient(145deg, rgba(16, 185, 129, 0.12) 0%, rgba(15, 23, 42, 0.75) 100%);
+  background: linear-gradient(145deg, rgba(16, 185, 129, 0.12) 0%, var(--bg-card) 100%);
   border: 2px solid rgba(16, 185, 129, 0.5);
   border-radius: var(--radius-xl);
   text-align: center;
@@ -488,7 +488,7 @@
   align-items: center;
   gap: 0.75rem;
   padding: 0.6rem 1.25rem;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--bg-secondary);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md);
   font-size: 0.85rem;

@@ -41,12 +41,12 @@ require __DIR__ . '/includes/header.php';
 ?>
 
 <div class="page container">
-  <div class="page-header" style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 1rem;">
-    <div>
+  <div class="page-header" style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start; gap: 1rem;">
+    <div style="flex: 1; min-width: 250px;">
       <h1 class="page-title">My Orders</h1>
       <p class="page-subtitle">Track your active meals and review order history</p>
     </div>
-    <a href="<?= ROOT_PATH ?>/menu.php" class="btn btn-primary btn-sm">
+    <a href="<?= ROOT_PATH ?>/menu.php" class="btn btn-primary btn-sm" style="flex-shrink: 0; margin-top: auto;">
       <i data-lucide="plus"></i> Order More Food
     </a>
   </div>
@@ -74,9 +74,9 @@ require __DIR__ . '/includes/header.php';
       </div>
     <?php else: ?>
       <?php foreach ($orders as $order): ?>
-        <div class="glass-card order-card" onclick="window.location.href='order-detail.php?id=<?= $order['order_id'] ?>'" style="cursor: pointer;">
-          <div class="order-card-info">
-            <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 4px;">
+        <div class="glass-card order-card" onclick="window.location.href='order-detail.php?id=<?= $order['order_id'] ?>'" style="cursor: pointer; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start; gap: 1rem;">
+          <div class="order-card-info" style="flex: 1; min-width: 200px;">
+            <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 4px; flex-wrap: wrap;">
               <span class="order-card-id">#<?= substr($order['order_id'], -6) ?></span>
               <?= render_status_badge($order['status']) ?>
             </div>
@@ -88,7 +88,7 @@ require __DIR__ . '/includes/header.php';
             </div>
           </div>
 
-          <div style="text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 0.5rem;">
+          <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 0.5rem; flex-shrink: 0;">
             <span class="order-card-price"><?= format_price($order['total_price']) ?></span>
             <span class="btn btn-secondary btn-sm" style="pointer-events: none;">
               <?= $order['status'] === 'completed' ? 'View Details <i data-lucide="check"></i>' : 'Track & QR <i data-lucide="arrow-right"></i>' ?>

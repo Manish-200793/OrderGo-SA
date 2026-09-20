@@ -14,7 +14,7 @@
       </p>
     </div>
     <div style="font-size: 0.8rem;">
-      &copy; <?= date('Y') ?> OrderGo. Specathon Winning Project.
+      &copy; <?= date('Y') ?> OrderGo. All Rights Reserved.
     </div>
   </div>
 </footer>

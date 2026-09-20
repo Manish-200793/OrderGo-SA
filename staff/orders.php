@@ -1,6 +1,6 @@
 <?php
 /**
- * OrderGo - Admin Order Manager
+ * OrderGo - Staff Order Viewer
  */
 
 require_once __DIR__ . '/../config/config.php';
@@ -8,7 +8,7 @@ require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/../includes/helpers.php';
 require_once __DIR__ . '/../includes/auth.php';
 
-require_role(['admin', 'staff']);
+require_role('staff');
 
 $db = get_db();
 
@@ -57,18 +57,16 @@ foreach ($orders as &$ord) {
 }
 unset($ord);
 
-$pageTitle = 'Order Manager';
-$extraCss = ['admin.css'];
+$pageTitle = 'Campus Orders - Staff View';
+$extraCss = ['admin.css']; // We reuse admin table styles
 require __DIR__ . '/../includes/header.php';
 ?>
 
-<div class="admin-layout">
-  <?php require __DIR__ . '/../includes/admin_sidebar.php'; ?>
-
-  <main class="admin-content">
-    <div class="page-header">
-      <h1 class="page-title">Campus Order Log</h1>
-      <p class="page-subtitle">Track, filter, and inspect all student orders in real time</p>
+<div class="page" style="padding-top: 100px; padding-bottom: 60px;">
+  <div class="container">
+    <div class="page-header" style="margin-bottom: 2rem;">
+      <h1 class="page-title">Campus Orders</h1>
+      <p class="page-subtitle">Read-only view of all recent orders</p>
     </div>
 
     <!-- Filters Bar -->
@@ -148,9 +146,7 @@ require __DIR__ . '/../includes/header.php';
         </tbody>
       </table>
     </div>
-  </main>
+  </div>
 </div>
-
-
 
 <?php require __DIR__ . '/../includes/footer.php'; ?>

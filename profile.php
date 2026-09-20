@@ -75,14 +75,14 @@ require __DIR__ . '/includes/header.php';
   <?php endif; ?>
 
   <!-- Stats Banner -->
-  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 2rem;">
-    <div class="glass-card" style="padding: 1.5rem; text-align: center;">
+  <div style="display: flex; flex-wrap: wrap; gap: 1rem; margin-bottom: 2rem;">
+    <div class="glass-card" style="padding: 1.5rem; text-align: center; flex: 1; min-width: 140px;">
       <span style="font-size: 2rem; font-weight: 800; color: var(--accent-primary); font-family: var(--font-display);">
         <?= $stats['total_orders'] ?>
       </span>
       <span style="display: block; font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">Orders Placed</span>
     </div>
-    <div class="glass-card" style="padding: 1.5rem; text-align: center;">
+    <div class="glass-card" style="padding: 1.5rem; text-align: center; flex: 1; min-width: 140px;">
       <span style="font-size: 2rem; font-weight: 800; color: #10b981; font-family: var(--font-display);">
         <?= format_price($stats['total_spent']) ?>
       </span>
@@ -103,13 +103,13 @@ require __DIR__ . '/includes/header.php';
         <input type="text" id="name" name="name" class="form-input" value="<?= htmlspecialchars($user['name']) ?>" required>
       </div>
 
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-        <div class="form-group">
+      <div style="display: flex; flex-wrap: wrap; gap: 1rem;">
+        <div class="form-group" style="flex: 1; min-width: 200px;">
           <label class="form-label" for="phone">Phone Number</label>
           <input type="tel" id="phone" name="phone" class="form-input" value="<?= htmlspecialchars($user['phone'] ?? '') ?>">
         </div>
 
-        <div class="form-group">
+        <div class="form-group" style="flex: 1; min-width: 200px;">
           <label class="form-label" for="roll_number">Roll Number</label>
           <input type="text" id="roll_number" name="roll_number" class="form-input" value="<?= htmlspecialchars($user['roll_number'] ?? '') ?>">
         </div>

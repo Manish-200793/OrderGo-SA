@@ -25,6 +25,9 @@ require __DIR__ . '/../includes/header.php';
 
 <!-- HTML5-QRCode Scanner Library CDN -->
 <script src="https://unpkg.com/html5-qrcode"></script>
+<script>
+  window.isKitchenAdmin = <?= json_encode($user['role'] === 'admin') ?>;
+</script>
 
 <div class="staff-dashboard">
   <!-- Header -->
@@ -34,9 +37,7 @@ require __DIR__ . '/../includes/header.php';
       <p>Live kitchen workflow, counter walk-in POS, and instant camera QR scanner</p>
     </div>
     <div style="display: flex; align-items: center; gap: 0.75rem;">
-      <div id="refresh-indicator" class="staff-refresh-indicator">
-        <i data-lucide="refresh-cw" style="width: 14px; height: 14px;"></i> Live Syncing (3s)
-      </div>
+
       <button class="btn btn-secondary btn-sm" onclick="toggleStaffSound()" id="btn-sound-toggle">
         🔔 Sound: ON
       </button>

@@ -115,15 +115,23 @@ require __DIR__ . '/includes/header.php';
               </div>
               <p class="menu-card-desc"><?= htmlspecialchars($item['description']) ?></p>
               <div class="menu-card-actions">
-                <button class="btn btn-primary btn-sm w-full btn-add-cart" 
-                        onclick="Cart.addItem({item_id: <?= $item['item_id'] ?>, name: '<?= addslashes($item['name']) ?>', price: <?= $item['price'] ?>, image_url: '<?= addslashes(get_image_url($item['image_url'])) ?>'})">
-                  <i data-lucide="plus"></i> Add to Cart
-                </button>
-                <div class="quantity-control" style="display: none;">
-                  <button class="qty-btn" onclick="Cart.updateQuantity(<?= $item['item_id'] ?>, Cart.getItems().find(i => i.item_id === <?= $item['item_id'] ?>)?.quantity - 1 || 0)">-</button>
-                  <span class="qty-value">1</span>
-                  <button class="qty-btn" onclick="Cart.updateQuantity(<?= $item['item_id'] ?>, (Cart.getItems().find(i => i.item_id === <?= $item['item_id'] ?>)?.quantity || 0) + 1)">+</button>
-                </div>
+                <?php if (is_logged_in()): ?>
+                  <button class="btn-add-cart" 
+                          onclick="Cart.addItem({item_id: <?= $item['item_id'] ?>, name: '<?= addslashes($item['name']) ?>', price: <?= $item['price'] ?>, image_url: '<?= addslashes(get_image_url($item['image_url'])) ?>'})">
+                    <span class="show-on-mobile">ADD</span>
+                    <span class="hide-on-mobile"><i data-lucide="plus" style="width:16px;height:16px;vertical-align:middle;"></i> Add to Cart</span>
+                  </button>
+                  <div class="quantity-control" style="display: none;">
+                    <button class="qty-btn" onclick="Cart.updateQuantity(<?= $item['item_id'] ?>, Cart.getItems().find(i => i.item_id === <?= $item['item_id'] ?>)?.quantity - 1 || 0)">-</button>
+                    <span class="qty-value">1</span>
+                    <button class="qty-btn" onclick="Cart.updateQuantity(<?= $item['item_id'] ?>, (Cart.getItems().find(i => i.item_id === <?= $item['item_id'] ?>)?.quantity || 0) + 1)">+</button>
+                  </div>
+                <?php else: ?>
+                  <a href="<?= ROOT_PATH ?>/login.php" class="btn-login-order">
+                    <span class="show-on-mobile">ADD</span>
+                    <span class="hide-on-mobile"><i data-lucide="log-in" style="width:16px;height:16px;vertical-align:middle;"></i> Login to Order</span>
+                  </a>
+                <?php endif; ?>
               </div>
             </div>
           </div>

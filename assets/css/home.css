@@ -160,4 +160,6 @@
 @media (max-width: 640px) {
   .hero-title { font-size: var(--font-size-3xl); }
   .features-grid { grid-template-columns: 1fr; }
+  .hero-actions { flex-direction: column; }
+  .hero-stats { flex-wrap: wrap; justify-content: center; }
 }

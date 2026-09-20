@@ -67,14 +67,6 @@ require __DIR__ . '/includes/header.php';
             </div>
           </div>
 
-          <div class="payment-option" id="pay-cash" onclick="selectPayment('cash')">
-            <input type="radio" name="payment_method" value="cash" style="display: none;">
-            <i data-lucide="banknote" style="width: 20px; height: 20px; color: #10b981;"></i>
-            <div>
-              <strong>Cash on Pickup</strong>
-              <small>Pay at canteen counter when collecting</small>
-            </div>
-          </div>
         </div>
       </div>
 

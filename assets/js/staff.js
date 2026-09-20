@@ -198,27 +198,34 @@ const StaffApp = {
   },
 
   renderActionButtons(order) {
+    const disableState = window.isKitchenAdmin ? 'disabled style="opacity: 0.6; cursor: not-allowed;"' : '';
+    
     if (order.status === 'pending') {
+      const clickPrep = window.isKitchenAdmin ? '' : `onclick="StaffApp.updateStatus('${order.order_id}', 'preparing')"`;
+      const clickCancel = window.isKitchenAdmin ? '' : `onclick="StaffApp.updateStatus('${order.order_id}', 'cancelled')"`;
       return `
-        <button class="btn btn-primary btn-sm" onclick="StaffApp.updateStatus('${order.order_id}', 'preparing')">
+        <button class="btn btn-primary btn-sm" ${clickPrep} ${disableState}>
           <i data-lucide="cooking-pot"></i> Start Preparing
         </button>
-        <button class="btn btn-danger btn-sm" onclick="StaffApp.updateStatus('${order.order_id}', 'cancelled')">
+        <button class="btn btn-danger btn-sm" ${clickCancel} ${disableState}>
           Cancel
         </button>
       `;
     } else if (order.status === 'preparing') {
+      const clickReady = window.isKitchenAdmin ? '' : `onclick="StaffApp.updateStatus('${order.order_id}', 'ready')"`;
+      const clickCancel = window.isKitchenAdmin ? '' : `onclick="StaffApp.updateStatus('${order.order_id}', 'cancelled')"`;
       return `
-        <button class="btn btn-primary btn-sm" style="background: #10b981; border-color: #10b981;" onclick="StaffApp.updateStatus('${order.order_id}', 'ready')">
+        <button class="btn btn-primary btn-sm" style="background: #10b981; border-color: #10b981;" ${clickReady} ${disableState}>
           <i data-lucide="check-circle-2"></i> Mark Ready
         </button>
-        <button class="btn btn-danger btn-sm" onclick="StaffApp.updateStatus('${order.order_id}', 'cancelled')">
+        <button class="btn btn-danger btn-sm" ${clickCancel} ${disableState}>
           Cancel
         </button>
       `;
     } else if (order.status === 'ready') {
+      const clickScan = window.isKitchenAdmin ? '' : `onclick="ScannerApp.openModal('${order.order_id}')"`;
       return `
-        <button class="btn btn-primary btn-sm" style="background: #2563eb; border-color: #2563eb;" onclick="ScannerApp.openModal('${order.order_id}')">
+        <button class="btn btn-primary btn-sm" style="background: #2563eb; border-color: #2563eb;" ${clickScan} ${disableState}>
           <i data-lucide="scan-line"></i> Scan Student QR
         </button>
       `;
