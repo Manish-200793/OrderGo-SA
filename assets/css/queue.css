@@ -1,0 +1,114 @@
+/* ============================================
+   TV Queue Display Board Styles
+   ============================================ */
+
+.queue-container {
+  min-height: 100vh;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  padding: var(--space-xl) var(--space-2xl);
+  display: flex;
+  flex-direction: column;
+}
+
+.queue-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-2xl);
+  padding-bottom: var(--space-md);
+  border-bottom: 2px solid var(--border-subtle);
+}
+
+.queue-header h1 {
+  font-size: var(--font-size-3xl);
+  font-weight: 800;
+  margin: 0;
+  color: var(--accent-primary);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.queue-time {
+  font-size: var(--font-size-2xl);
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.queue-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-2xl);
+  flex: 1;
+}
+
+.queue-col {
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-card);
+  border-radius: var(--radius-xl);
+  padding: var(--space-xl);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-subtle);
+}
+
+.queue-col-title {
+  text-align: center;
+  font-size: var(--font-size-2xl);
+  font-weight: 800;
+  margin-bottom: var(--space-xl);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+}
+
+.col-preparing .queue-col-title { color: #f59e0b; }
+.col-ready .queue-col-title { color: #10b981; }
+
+.queue-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  overflow-y: auto;
+  max-height: calc(100vh - 220px);
+}
+
+.queue-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-md) var(--space-lg);
+  border-radius: var(--radius-md);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-subtle);
+}
+
+.card-preparing { border-left: 6px solid #f59e0b; }
+.card-ready {
+  border-left: 6px solid #10b981;
+  background: rgba(16, 185, 129, 0.08);
+}
+
+.queue-number {
+  font-size: var(--font-size-2xl);
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.card-ready .queue-number { color: #10b981; }
+
+.queue-name {
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.queue-empty {
+  text-align: center;
+  font-size: var(--font-size-lg);
+  color: var(--text-muted);
+  margin-top: var(--space-3xl);
+}
+
+@media (max-width: 900px) {
+  .queue-grid { grid-template-columns: 1fr; }
+}

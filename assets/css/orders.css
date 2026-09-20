@@ -1,0 +1,506 @@
+/* ============================================
+   Orders & Status Tracking Styles
+   ============================================ */
+
+.orders-tabs {
+  display: flex;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-xl);
+}
+
+.orders-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.order-card {
+  padding: var(--space-lg);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all var(--transition-fast);
+}
+
+.order-card-info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.order-card-id {
+  font-family: var(--font-display);
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.order-card-meta {
+  font-size: var(--font-size-xs);
+  color: var(--text-muted);
+}
+
+.order-card-price {
+  font-size: var(--font-size-xl);
+  font-weight: 800;
+  color: var(--accent-primary-hover);
+}
+
+/* Status Tracker */
+.status-tracker {
+  padding: var(--space-lg) 0;
+}
+
+.status-steps {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  position: relative;
+}
+
+.status-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  flex: 1;
+  gap: var(--space-sm);
+}
+
+.status-dot {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-full);
+  background: var(--bg-secondary);
+  border: 2px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 2;
+  transition: all var(--transition-base);
+  color: var(--text-muted);
+}
+
+.status-step.active .status-dot {
+  background: var(--bg-card);
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+  box-shadow: 0 0 12px var(--accent-glow);
+}
+
+.status-step.current .status-dot {
+  background: var(--accent-primary);
+  color: #FFFFFF;
+}
+
+.status-label {
+  font-size: var(--font-size-xs);
+  color: var(--text-muted);
+  font-weight: 600;
+  text-align: center;
+}
+
+.status-step.active .status-label {
+  color: var(--text-primary);
+}
+
+.status-step.current .status-label {
+  color: var(--accent-primary-hover);
+  font-weight: 800;
+}
+
+.status-line {
+  position: absolute;
+  top: 24px;
+  left: 50%;
+  width: 100%;
+  height: 2px;
+  background: var(--border-subtle);
+  z-index: 1;
+}
+
+.status-line.filled {
+  background: var(--accent-primary);
+}
+
+/* QR Code Section */
+.qr-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-xl);
+  background: var(--bg-card);
+  border: 2px dashed var(--border-accent);
+  border-radius: var(--radius-xl);
+  text-align: center;
+  margin: var(--space-xl) 0;
+  transition: opacity 0.45s ease, transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.qr-container.disappearing {
+  opacity: 0;
+  transform: scale(0.9) translateY(-10px);
+  pointer-events: none;
+}
+
+.qr-code-box {
+  background: #FFFFFF;
+  padding: 16px;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  margin-bottom: var(--space-md);
+  display: inline-block;
+}
+
+.qr-pickup-id {
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--accent-primary);
+  letter-spacing: 2px;
+}
+
+/* Kitchen Waiting & Preparing Card (Shown while pending/preparing, before QR unlocks) */
+.kitchen-wait-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2.75rem 1.75rem;
+  border-radius: var(--radius-xl);
+  text-align: center;
+  margin: var(--space-xl) 0;
+  overflow: hidden;
+  transition: all 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
+  animation: waitCardSlideIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes waitCardSlideIn {
+  0% { opacity: 0; transform: translateY(18px) scale(0.96); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.kitchen-wait-card.state-pending {
+  background: linear-gradient(145deg, rgba(245, 158, 11, 0.1) 0%, rgba(15, 23, 42, 0.75) 100%);
+  border: 1.5px solid rgba(245, 158, 11, 0.4);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25), 0 0 35px rgba(245, 158, 11, 0.12);
+}
+
+.kitchen-wait-card.state-preparing {
+  background: linear-gradient(145deg, rgba(59, 130, 246, 0.12) 0%, rgba(15, 23, 42, 0.75) 100%);
+  border: 1.5px solid rgba(59, 130, 246, 0.45);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25), 0 0 35px rgba(59, 130, 246, 0.15);
+}
+
+.kitchen-wait-card.disappearing {
+  opacity: 0;
+  transform: scale(0.92) translateY(-10px);
+  pointer-events: none;
+}
+
+.wait-icon-wrapper {
+  position: relative;
+  width: 82px;
+  height: 82px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.25rem;
+  animation: waitIconFloat 3s infinite ease-in-out;
+}
+
+.state-pending .wait-icon-wrapper {
+  background: rgba(245, 158, 11, 0.15);
+  color: #f59e0b;
+  border: 2px solid rgba(245, 158, 11, 0.4);
+  box-shadow: 0 0 25px rgba(245, 158, 11, 0.25);
+}
+
+.state-preparing .wait-icon-wrapper {
+  background: rgba(59, 130, 246, 0.15);
+  color: #3b82f6;
+  border: 2px solid rgba(59, 130, 246, 0.4);
+  box-shadow: 0 0 25px rgba(59, 130, 246, 0.3);
+}
+
+@keyframes waitIconFloat {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+.wait-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  padding: 0.35rem 1rem;
+  border-radius: 999px;
+  margin-bottom: 0.85rem;
+}
+
+.state-pending .wait-badge {
+  background: rgba(245, 158, 11, 0.15);
+  color: #f59e0b;
+  border: 1px solid rgba(245, 158, 11, 0.35);
+}
+
+.state-preparing .wait-badge {
+  background: rgba(59, 130, 246, 0.15);
+  color: #3b82f6;
+  border: 1px solid rgba(59, 130, 246, 0.35);
+}
+
+.wait-title {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.4px;
+}
+
+.wait-description {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  max-width: 440px;
+  line-height: 1.55;
+  margin: 0 auto 1.5rem;
+}
+
+.wait-unlock-hint {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1.5px dashed var(--border-accent);
+  border-radius: var(--radius-lg);
+  padding: 1rem 1.25rem;
+  max-width: 460px;
+  text-align: left;
+}
+
+.wait-unlock-icon {
+  width: 38px;
+  height: 38px;
+  min-width: 38px;
+  border-radius: 50%;
+  background: rgba(255, 107, 0, 0.15);
+  color: var(--accent-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.wait-unlock-text {
+  font-size: 0.85rem;
+  line-height: 1.45;
+  color: var(--text-secondary);
+}
+
+.wait-unlock-text strong {
+  color: var(--accent-primary);
+}
+
+.wait-live-sync {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-top: 1.25rem;
+}
+
+.wait-live-sync .pulse-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent-primary);
+  animation: liveSyncPulse 1.5s infinite;
+}
+
+@keyframes liveSyncPulse {
+  0% { transform: scale(0.9); opacity: 0.7; }
+  50% { transform: scale(1.3); opacity: 1; }
+  100% { transform: scale(0.9); opacity: 0.7; }
+}
+
+/* Pickup Success Verified Card (Shown when staff scans student QR) */
+.pickup-success-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2.75rem 1.75rem;
+  background: linear-gradient(145deg, rgba(16, 185, 129, 0.12) 0%, rgba(15, 23, 42, 0.75) 100%);
+  border: 2px solid rgba(16, 185, 129, 0.5);
+  border-radius: var(--radius-xl);
+  text-align: center;
+  margin: var(--space-xl) 0;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.35), 0 0 40px rgba(16, 185, 129, 0.22);
+  overflow: hidden;
+  animation: successCardPop 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes successCardPop {
+  0% {
+    opacity: 0;
+    transform: translateY(24px) scale(0.94);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.success-confetti-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.success-tick-wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.success-tick-ring {
+  position: absolute;
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  border: 2.5px solid rgba(16, 185, 129, 0.4);
+  animation: tickRingPulse 2.2s infinite ease-out;
+}
+
+.success-tick-circle {
+  width: 86px;
+  height: 86px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 12px 28px rgba(16, 185, 129, 0.45), 0 0 35px rgba(16, 185, 129, 0.3);
+  animation: tickBounce 0.65s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+.success-tick-svg {
+  width: 48px;
+  height: 48px;
+}
+
+.success-tick-check {
+  stroke: #ffffff;
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+  stroke-dasharray: 60;
+  stroke-dashoffset: 60;
+  animation: drawTickStroke 0.55s 0.25s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+}
+
+@keyframes tickBounce {
+  0% {
+    transform: scale(0) rotate(-35deg);
+    opacity: 0;
+  }
+  65% {
+    transform: scale(1.15) rotate(5deg);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+@keyframes drawTickStroke {
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes tickRingPulse {
+  0% {
+    transform: scale(0.85);
+    opacity: 0.85;
+  }
+  100% {
+    transform: scale(1.55);
+    opacity: 0;
+  }
+}
+
+.pickup-success-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: rgba(16, 185, 129, 0.16);
+  color: #10b981;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  padding: 0.35rem 1rem;
+  border-radius: 999px;
+  border: 1.5px solid rgba(16, 185, 129, 0.35);
+  margin-bottom: 0.85rem;
+}
+
+.pickup-success-title {
+  font-size: 1.7rem;
+  font-weight: 800;
+  color: #10b981;
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.5px;
+  line-height: 1.25;
+}
+
+.pickup-success-text {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  max-width: 380px;
+  line-height: 1.5;
+  margin: 0 auto 1.5rem;
+}
+
+.pickup-success-meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.6rem 1.25rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-bottom: 1.5rem;
+}
+
+.pickup-success-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+

@@ -1,0 +1,22 @@
+# ==============================================================================
+# OrderGo - Apache / XAMPP Configuration
+# ==============================================================================
+
+DirectoryIndex index.php
+
+# Prevent Directory Browsing
+Options -Indexes
+
+# Set default charset
+AddDefaultCharset UTF-8
+
+# Protect internal schema, environment, and repository files
+<FilesMatch "^(schema\.sql|\.env|\.git.*)$">
+    Require all denied
+</FilesMatch>
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    # Prevent direct HTTP browser listing/access to internal backend includes
+    RewriteRule ^(config|includes)/ - [F,L]
+</IfModule>
