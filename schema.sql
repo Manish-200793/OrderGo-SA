@@ -134,11 +134,28 @@ INSERT INTO `odg_staff` (`staff_id`, `name`, `email`, `phone`) VALUES
 INSERT INTO `odg_students` (`student_id`, `name`, `email`, `phone`, `roll_number`, `cgpa`, `skills`, `preferred_domain`, `status`) VALUES
 (3, 'Rahul Student', 'student@ordergo.com', '9876543212', '21N61A0501', 8.5, 'C++, Python', 'Software', 'approved');
 
--- 2. Default Menu Items (with high-quality Unsplash image URLs)
+-- 2. Default Menu Items (Local Images)
 INSERT INTO `odg_menu_items` (`name`, `description`, `category`, `price`, `stock`, `image_url`, `is_available`, `is_daily_special`) VALUES
-('Veg Thali', 'A wholesome meal with chapati, dal, rice, and two curries.', 'lunch', 80.00, 50, 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?q=80&w=2070&auto=format&fit=crop', 1, 1),
-('Chicken Biryani', 'Aromatic basmati rice cooked with tender chicken and spices.', 'lunch', 120.00, 30, 'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?q=80&w=2010&auto=format&fit=crop', 1, 1),
-('Samosa', 'Crispy pastry filled with spiced potatoes and peas.', 'snacks', 15.00, 100, 'https://images.unsplash.com/photo-1601050690597-df0568f70950?q=80&w=2070&auto=format&fit=crop', 1, 0),
-('Masala Dosa', 'Thin crepe served with spicy potato filling and chutney.', 'breakfast', 50.00, 40, 'https://images.unsplash.com/photo-1589301760014-d929f39ce9b0?q=80&w=2070&auto=format&fit=crop', 1, 0),
-('Cold Coffee', 'Creamy and refreshing chilled coffee.', 'beverages', 40.00, 50, 'https://images.unsplash.com/photo-1572490122747-3968b75bb8fc?q=80&w=1974&auto=format&fit=crop', 1, 0),
-('Gulab Jamun', 'Sweet milk-solid balls soaked in sugar syrup.', 'desserts', 30.00, 60, 'https://images.unsplash.com/photo-1589114471223-ecc2a5dfb064?q=80&w=1974&auto=format&fit=crop', 1, 0);
+('Aloo Paratha', 'Stuffed flatbread with spiced potatoes served with curd and pickle.', 'breakfast', 45.00, 50, 'assets/images/aloo-paratha.jpg', 1, 0),
+('Chicken Biryani', 'Aromatic basmati rice cooked with tender chicken and spices.', 'lunch', 120.00, 30, 'assets/images/biryani.jpg', 1, 1),
+('Butter Naan', 'Soft and fluffy Indian flatbread brushed with butter.', 'lunch', 25.00, 100, 'assets/images/butter-naan.jpg', 1, 0),
+('Masala Chai', 'Hot, sweet Indian tea brewed with milk and aromatic spices.', 'beverages', 15.00, 100, 'assets/images/chai.jpg', 1, 0),
+('Chole Bhature', 'Spicy chickpea curry served with fried fluffy bread.', 'lunch', 70.00, 40, 'assets/images/chole.jpg', 1, 1),
+('Cold Coffee', 'Creamy, thick, and refreshing chilled coffee.', 'beverages', 50.00, 50, 'assets/images/cold-coffee.jpg', 1, 0),
+('Egg Fried Rice', 'Stir-fried rice with egg, vegetables, and soy sauce.', 'lunch', 80.00, 40, 'assets/images/egg-fried-rice.jpg', 1, 0),
+('Ice Cream', 'Two scoops of classic vanilla/chocolate ice cream.', 'desserts', 40.00, 50, 'assets/images/ice-cream.jpg', 1, 0),
+('Idli Sambar', 'Soft steamed rice cakes served with hot lentil soup and chutney.', 'breakfast', 40.00, 60, 'assets/images/idli.jpg', 1, 0),
+('Sweet Lassi', 'Traditional yogurt-based cold, sweet drink.', 'beverages', 35.00, 50, 'assets/images/lassi.jpg', 1, 0),
+('Fresh Lime Soda', 'Refreshing chilled sweet and salted lime soda.', 'beverages', 30.00, 60, 'assets/images/lime-soda.jpg', 1, 0),
+('Masala Maggi', 'Classic hot instant noodles cooked with veggies and spices.', 'snacks', 40.00, 80, 'assets/images/maggi.jpg', 1, 0),
+('Masala Dosa', 'Thin crispy crepe served with spicy potato filling and chutney.', 'breakfast', 50.00, 40, 'assets/images/masala-dosa.jpg', 1, 0),
+('Paneer Butter Masala', 'Rich and creamy curry made with paneer, spices, onions, and tomatoes.', 'lunch', 110.00, 30, 'assets/images/paneer.jpg', 1, 1),
+('Chocolate Pastry', 'Rich chocolate layered cake slice.', 'desserts', 60.00, 30, 'assets/images/pastry.jpg', 1, 0),
+('Pav Bhaji', 'Spicy vegetable mash served with butter-toasted buns.', 'snacks', 60.00, 50, 'assets/images/pav-bhaji.jpg', 1, 1),
+('Kanda Poha', 'Flattened rice cooked with onions, peanuts, and spices.', 'breakfast', 30.00, 50, 'assets/images/poha.jpg', 1, 0),
+('Rajma Chawal', 'Red kidney beans in a thick gravy served with steamed rice.', 'lunch', 75.00, 40, 'assets/images/rajma.jpg', 1, 0),
+('Rumali Roti', 'Extremely thin and soft Indian flatbread.', 'lunch', 15.00, 80, 'assets/images/rumali-roti.jpg', 1, 0),
+('Samosa', 'Crispy pastry filled with spiced potatoes and peas.', 'snacks', 15.00, 100, 'assets/images/samosa.jpg', 1, 0),
+('Upma', 'Thick porridge made from dry-roasted semolina with veggies.', 'breakfast', 35.00, 50, 'assets/images/upma.jpg', 1, 0),
+('Veg Fried Rice', 'Stir-fried rice with mixed vegetables and soy sauce.', 'lunch', 70.00, 40, 'assets/images/veg-fried-rice.jpg', 1, 0),
+('Veg Thali', 'A wholesome meal with chapati, dal, rice, two curries, and a sweet.', 'lunch', 90.00, 50, 'assets/images/veg-thali.jpg', 1, 0);
