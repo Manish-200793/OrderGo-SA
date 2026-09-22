@@ -114,3 +114,31 @@ CREATE INDEX idx_odg_feedback_item ON odg_feedback(item_id);
 CREATE INDEX idx_odg_menu_category ON odg_menu_items(category);
 CREATE INDEX idx_odg_password_resets_lookup ON odg_password_resets(email, code);
 
+-- --------------------------------------------------------
+-- DEFAULT DATA DUMP FOR OUT-OF-THE-BOX USAGE
+-- --------------------------------------------------------
+
+-- 1. Default Accounts
+-- All accounts use the password: password123
+INSERT INTO `odg_users` (`user_id`, `email`, `password_hash`, `role`) VALUES
+(1, 'admin@ordergo.com', '$2y$10$hYxxNpdhguug46iPF.r13u2Z.nGvHh8P6oDqjtKtqNLrC7Ahgx0fy', 'admin'),
+(2, 'kitchen@ordergo.com', '$2y$10$hYxxNpdhguug46iPF.r13u2Z.nGvHh8P6oDqjtKtqNLrC7Ahgx0fy', 'staff'),
+(3, 'student@ordergo.com', '$2y$10$hYxxNpdhguug46iPF.r13u2Z.nGvHh8P6oDqjtKtqNLrC7Ahgx0fy', 'student');
+
+INSERT INTO `odg_admins` (`admin_id`, `name`, `email`, `phone`) VALUES
+(1, 'System Admin', 'admin@ordergo.com', '9876543210');
+
+INSERT INTO `odg_staff` (`staff_id`, `name`, `email`, `phone`) VALUES
+(2, 'Head Chef', 'kitchen@ordergo.com', '9876543211');
+
+INSERT INTO `odg_students` (`student_id`, `name`, `email`, `phone`, `roll_number`, `cgpa`, `skills`, `preferred_domain`, `status`) VALUES
+(3, 'Rahul Student', 'student@ordergo.com', '9876543212', '21N61A0501', 8.5, 'C++, Python', 'Software', 'approved');
+
+-- 2. Default Menu Items (with high-quality Unsplash image URLs)
+INSERT INTO `odg_menu_items` (`name`, `description`, `category`, `price`, `stock`, `image_url`, `is_available`, `is_daily_special`) VALUES
+('Veg Thali', 'A wholesome meal with chapati, dal, rice, and two curries.', 'lunch', 80.00, 50, 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?q=80&w=2070&auto=format&fit=crop', 1, 1),
+('Chicken Biryani', 'Aromatic basmati rice cooked with tender chicken and spices.', 'lunch', 120.00, 30, 'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?q=80&w=2010&auto=format&fit=crop', 1, 1),
+('Samosa', 'Crispy pastry filled with spiced potatoes and peas.', 'snacks', 15.00, 100, 'https://images.unsplash.com/photo-1601050690597-df0568f70950?q=80&w=2070&auto=format&fit=crop', 1, 0),
+('Masala Dosa', 'Thin crepe served with spicy potato filling and chutney.', 'breakfast', 50.00, 40, 'https://images.unsplash.com/photo-1589301760014-d929f39ce9b0?q=80&w=2070&auto=format&fit=crop', 1, 0),
+('Cold Coffee', 'Creamy and refreshing chilled coffee.', 'beverages', 40.00, 50, 'https://images.unsplash.com/photo-1572490122747-3968b75bb8fc?q=80&w=1974&auto=format&fit=crop', 1, 0),
+('Gulab Jamun', 'Sweet milk-solid balls soaked in sugar syrup.', 'desserts', 30.00, 60, 'https://images.unsplash.com/photo-1589114471223-ecc2a5dfb064?q=80&w=1974&auto=format&fit=crop', 1, 0);
