@@ -95,30 +95,18 @@ require __DIR__ . '/includes/header.php';
           <label class="form-label" for="password" style="margin: 0;">Password</label>
           <a href="<?= ROOT_PATH ?>/forgot-password.php" style="font-size: 0.75rem;">Forgot Password?</a>
         </div>
-        <input type="password" id="password" name="password" class="form-input" placeholder="••••••••" required>
+        <div style="position: relative;">
+          <input type="password" id="password" name="password" class="form-input" placeholder="••••••••" required style="padding-right: 2.5rem;">
+          <button type="button" id="togglePassword" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--text-muted); padding: 0; display: flex; align-items: center; justify-content: center;" title="Toggle Password Visibility">
+            <i data-lucide="eye" style="width: 18px; height: 18px;"></i>
+          </button>
+        </div>
       </div>
 
       <button type="submit" class="btn btn-primary btn-lg w-full" style="margin-top: 0.5rem;">
         Sign In <i data-lucide="arrow-right"></i>
       </button>
     </form>
-
-    <div style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--border-subtle);">
-      <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.75rem; text-align: center; font-weight: 600;">
-        ⚡ Quick Demo Logins:
-      </p>
-      <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
-        <button type="button" class="btn btn-secondary btn-sm" style="flex: 1; font-size: 0.75rem;" onclick="fillLogin('rahul@college.edu', 'student123')">
-          Student
-        </button>
-        <button type="button" class="btn btn-secondary btn-sm" style="flex: 1; font-size: 0.75rem;" onclick="fillLogin('staff@ordergo.com', 'staff123')">
-          Staff
-        </button>
-        <button type="button" class="btn btn-secondary btn-sm" style="flex: 1; font-size: 0.75rem;" onclick="fillLogin('admin@ordergo.com', 'admin123')">
-          Admin
-        </button>
-      </div>
-    </div>
 
     <p style="text-align: center; font-size: 0.875rem; color: var(--text-secondary); margin-top: 1.5rem;">
       Don't have an account? <a href="<?= ROOT_PATH ?>/register.php" style="font-weight: 600;">Sign up here</a>
@@ -127,10 +115,23 @@ require __DIR__ . '/includes/header.php';
 </div>
 
 <script>
-function fillLogin(email, pwd) {
-  document.getElementById('email').value = email;
-  document.getElementById('password').value = pwd;
-}
+document.getElementById('togglePassword').addEventListener('click', function () {
+    const passwordInput = document.getElementById('password');
+    const icon = this.querySelector('i');
+    
+    if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        icon.setAttribute('data-lucide', 'eye-off');
+    } else {
+        passwordInput.type = 'password';
+        icon.setAttribute('data-lucide', 'eye');
+    }
+    
+    // Refresh lucide icons to apply the new icon
+    if (typeof lucide !== 'undefined') {
+        lucide.createIcons();
+    }
+});
 </script>
 
 <?php require __DIR__ . '/includes/footer.php'; ?>
