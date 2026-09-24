@@ -145,45 +145,97 @@ require __DIR__ . '/../includes/header.php';
 
 <!-- Counter POS Modal -->
 <div class="modal-overlay" id="pos-modal">
-  <div class="modal-content" style="max-width: 580px;">
-    <div class="modal-header">
-      <h2>Counter Walk-In POS</h2>
+  <div class="modal-content" style="max-width: 800px; padding: 2rem;">
+    <div class="modal-header" style="margin-bottom: 1.5rem;">
+      <h2 style="font-size: 1.5rem; font-weight: 700;">New POS Order (Cash)</h2>
       <button class="btn-close" onclick="closePOSModal()"><i data-lucide="x"></i></button>
     </div>
 
-    <div class="form-group">
-      <label class="form-label" for="pos-guest-name">Student / Customer Name</label>
-      <input type="text" id="pos-guest-name" class="form-input" placeholder="Walk-in Student or Roll #">
-    </div>
+    <div style="display: grid; grid-template-columns: 1fr 300px; gap: 2rem; align-items: start;">
+      <!-- Left Column: Menu Items -->
+      <div>
+        <h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem;">Menu Items</h3>
+        <div class="pos-items-selector" style="max-height: 400px; overflow-y: auto; padding-right: 10px;">
+          <?php foreach ($posMenuItems as $mItem): ?>
+            <div class="pos-item-row" style="background: var(--bg-secondary); border: 1px solid var(--border-subtle); border-radius: 8px; padding: 0.75rem 1rem; margin-bottom: 0.5rem; display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <strong style="display: block; margin-bottom: 0.2rem;"><?= htmlspecialchars($mItem['name']) ?></strong>
+                <span style="color: var(--text-muted); font-size: 0.85rem;">₹<?= $mItem['price'] ?></span>
+              </div>
+              <button class="btn btn-secondary btn-sm" style="border-radius: 20px; color: var(--accent-primary); border-color: var(--accent-primary); background: transparent; padding: 0.25rem 1rem;" onclick="addPosItem(<?= $mItem['item_id'] ?>, '<?= addslashes($mItem['name']) ?>', <?= $mItem['price'] ?>)">
+                Add
+              </button>
+            </div>
+          <?php endforeach; ?>
+        </div>
+      </div>
 
-    <label class="form-label">Select Canteen Items</label>
-    <div class="pos-items-selector">
-      <?php foreach ($posMenuItems as $mItem): ?>
-        <div class="pos-item-row">
-          <div>
-            <strong><?= htmlspecialchars($mItem['name']) ?></strong>
-            <span style="color: var(--text-muted); font-size: 0.8rem; margin-left: 0.5rem;"><?= format_price($mItem['price']) ?></span>
+      <!-- Right Column: Order Summary -->
+      <div style="background: var(--bg-secondary); border-radius: 12px; padding: 1.5rem;">
+        <h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem;">Order Summary</h3>
+        <div id="pos-tray-items" style="min-height: 150px; margin-bottom: 1rem;">
+          <p style="color: var(--text-muted); font-size: 0.9rem;">Cart is empty</p>
+        </div>
+        
+        <div style="border-top: 1px dashed var(--border-subtle); padding-top: 1rem; margin-bottom: 1rem;">
+          <div style="display: flex; justify-content: space-between; font-weight: 800; font-size: 1.2rem; margin-bottom: 1rem;">
+            <span>Total:</span>
+            <span id="pos-total-display">₹0</span>
           </div>
-          <button class="btn btn-secondary btn-sm" onclick="addPosItem(<?= $mItem['item_id'] ?>, '<?= addslashes($mItem['name']) ?>', <?= $mItem['price'] ?>)">
-            <i data-lucide="plus"></i> Add
+          
+          <div class="form-group" style="margin-bottom: 1rem;">
+            <label class="form-label" for="pos-guest-name" style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 0.4rem;">Student Name (Optional)</label>
+            <input type="text" id="pos-guest-name" class="form-input" style="border-radius: 8px; border-color: var(--accent-primary);" placeholder="e.g. John Doe">
+          </div>
+          
+          <button class="btn btn-primary btn-lg w-full" style="border-radius: 8px;" onclick="submitPosOrder()">
+            Collect Cash & Order
           </button>
         </div>
-      <?php endforeach; ?>
-    </div>
-
-    <div style="background: var(--bg-secondary); border-radius: 8px; padding: 1rem; margin-bottom: 1rem;">
-      <h4 style="font-size: 0.85rem; font-weight: 700; margin-bottom: 0.5rem;">Current POS Tray:</h4>
-      <div id="pos-tray-items">
-        <p style="color: var(--text-muted); font-size: 0.85rem;">Tray is empty</p>
-      </div>
-      <div style="display: flex; justify-content: space-between; border-top: 1px solid var(--border-subtle); margin-top: 0.5rem; padding-top: 0.5rem; font-weight: 800;">
-        <span>Total Due:</span>
-        <span id="pos-total-display" style="color: var(--accent-primary);">₹0</span>
       </div>
     </div>
+  </div>
+</div>
 
-    <button class="btn btn-primary btn-lg w-full" onclick="submitPosOrder()">
-      Complete Cash Order & Print Ticket <i data-lucide="check"></i>
+<!-- Order Slip Modal -->
+<div class="modal-overlay" id="slip-modal">
+  <div class="modal-content" style="max-width: 400px; padding: 2rem; background: #fff; color: #000;">
+    <div class="modal-header" style="margin-bottom: 1rem;">
+      <h2 style="font-size: 1.2rem; font-weight: 700; margin: 0;">Order Slip</h2>
+      <button class="btn-close" style="color: #000;" onclick="closeSlipModal()"><i data-lucide="x"></i></button>
+    </div>
+    
+    <div id="slip-printable-area" style="text-align: center; font-family: sans-serif;">
+      <h1 style="font-size: 1.5rem; font-weight: 800; margin: 0 0 5px 0;">OrderGo</h1>
+      <p style="margin: 0; font-size: 0.9rem; color: #444;">College Canteen</p>
+      
+      <div style="border-top: 1px dashed #ccc; margin: 15px 0;"></div>
+      
+      <div style="text-align: left; font-size: 0.95rem; line-height: 1.5;">
+        <div><strong>Order ID:</strong> <span id="slip-order-id"></span></div>
+        <div><strong>Name:</strong> <span id="slip-guest-name"></span></div>
+      </div>
+      
+      <div style="border-top: 1px dashed #ccc; margin: 15px 0;"></div>
+      
+      <div id="slip-items" style="text-align: left; font-size: 0.95rem; line-height: 1.8;">
+        <!-- Items injected here -->
+      </div>
+      
+      <div style="border-top: 1px solid #000; margin: 10px 0;"></div>
+      
+      <div style="display: flex; justify-content: space-between; font-weight: 800; font-size: 1rem; margin-bottom: 20px;">
+        <span>Total (PAID CASH)</span>
+        <span id="slip-total"></span>
+      </div>
+      
+      <img id="slip-qr-image" src="" alt="QR Code" style="width: 150px; height: 150px; margin: 0 auto; display: block;" />
+      
+      <p style="font-size: 0.8rem; margin-top: 10px; color: #444;">Show this QR at the counter</p>
+    </div>
+    
+    <button class="btn btn-primary btn-lg w-full" style="margin-top: 1.5rem; border-radius: 8px;" onclick="printSlip()">
+      Print Slip
     </button>
   </div>
 </div>
@@ -232,18 +284,18 @@ function renderPosTray() {
   const totalDisplay = document.getElementById('pos-total-display');
 
   if (posCart.length === 0) {
-    container.innerHTML = '<p style="color: var(--text-muted); font-size: 0.85rem;">Tray is empty</p>';
+    container.innerHTML = '<p style="color: var(--text-muted); font-size: 0.9rem;">Cart is empty</p>';
     totalDisplay.textContent = '₹0';
     return;
   }
 
   container.innerHTML = posCart.map(item => `
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 4px; font-size: 0.85rem;">
-      <span><strong>${item.quantity}x</strong> ${item.name}</span>
-      <div>
-        <span style="margin-right: 8px;">₹${item.price * item.quantity}</span>
-        <button class="btn btn-ghost btn-sm" onclick="updatePosQty(${item.item_id}, -1)">-</button>
-        <button class="btn btn-ghost btn-sm" onclick="updatePosQty(${item.item_id}, 1)">+</button>
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 12px; font-size: 0.95rem;">
+      <span style="flex: 1;">${item.name}</span>
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <button class="btn btn-primary" style="padding: 0; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1rem; line-height: 1;" onclick="updatePosQty(${item.item_id}, -1)">-</button>
+        <strong style="min-width: 20px; text-align: center;">${item.quantity}</strong>
+        <button class="btn btn-primary" style="padding: 0; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1rem; line-height: 1;" onclick="updatePosQty(${item.item_id}, 1)">+</button>
       </div>
     </div>
   `).join('');
@@ -275,9 +327,29 @@ async function submitPosOrder() {
     const data = await res.json();
     if (data.success) {
       Cart.showToast(`POS Order #${data.order.order_id.replace('ORD-','')} placed!`, 'success');
+      
+      // Setup Slip
+      document.getElementById('slip-order-id').textContent = data.order.order_id;
+      document.getElementById('slip-guest-name').textContent = guestName;
+      
+      const slipItemsHtml = posCart.map(item => `
+        <div style="display: flex; justify-content: space-between;">
+          <span>${item.quantity}x ${item.name}</span>
+          <span>₹${item.price * item.quantity}</span>
+        </div>
+      `).join('');
+      document.getElementById('slip-items').innerHTML = slipItemsHtml;
+      
+      const total = posCart.reduce((sum, i) => sum + (i.price * i.quantity), 0);
+      document.getElementById('slip-total').textContent = '₹' + total.toFixed(2);
+      
+      // Generate QR Code using the order ID
+      document.getElementById('slip-qr-image').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(data.order.qr_code || data.order.order_id)}`;
+      
       posCart = [];
       document.getElementById('pos-guest-name').value = '';
       closePOSModal();
+      document.getElementById('slip-modal').classList.add('active');
       StaffApp.fetchOrders(false);
     } else {
       alert(data.error || 'Failed to place POS order');
@@ -285,6 +357,26 @@ async function submitPosOrder() {
   } catch (e) {
     alert('Network error while placing POS order');
   }
+}
+
+function closeSlipModal() {
+  document.getElementById('slip-modal').classList.remove('active');
+}
+
+function printSlip() {
+  const printContent = document.getElementById('slip-printable-area').innerHTML;
+  const printWindow = window.open('', '', 'width=600,height=800');
+  printWindow.document.write('<html><head><title>Print Slip</title>');
+  printWindow.document.write('<style>body{font-family:sans-serif;padding:20px;} @media print{body{margin:0;padding:0;}}</style>');
+  printWindow.document.write('</head><body>');
+  printWindow.document.write(printContent);
+  printWindow.document.write('</body></html>');
+  printWindow.document.close();
+  printWindow.focus();
+  setTimeout(() => {
+    printWindow.print();
+    printWindow.close();
+  }, 250);
 }
 
 document.addEventListener('DOMContentLoaded', () => {
