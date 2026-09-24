@@ -367,15 +367,16 @@ function printSlip() {
   const printContent = document.getElementById('slip-printable-area').innerHTML;
   const printWindow = window.open('', '', 'width=600,height=800');
   printWindow.document.write('<html><head><title>Print Slip</title>');
-  printWindow.document.write('<style>body{font-family:sans-serif;padding:20px;text-align:center;} @media print{body{margin:0;padding:0;}}</style>');
+  printWindow.document.write('<style>body{font-family:sans-serif;padding:20px;} @media print{body{margin:0;padding:0;}}</style>');
   printWindow.document.write('</head><body>');
   printWindow.document.write(printContent);
-  printWindow.document.write('<script>');
-  printWindow.document.write('window.onload = function() { setTimeout(function() { window.print(); window.close(); }, 500); }');
-  printWindow.document.write('</script>');
   printWindow.document.write('</body></html>');
   printWindow.document.close();
   printWindow.focus();
+  setTimeout(() => {
+    printWindow.print();
+    printWindow.close();
+  }, 250);
 }
 
 document.addEventListener('DOMContentLoaded', () => {
