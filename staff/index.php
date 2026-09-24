@@ -57,6 +57,17 @@ require __DIR__ . '/../includes/header.php';
       </div>
     </div>
 
+    <!-- Menu Management Action -->
+    <a href="<?= ROOT_PATH ?>/admin/menu.php" class="staff-quick-btn" style="text-decoration: none;">
+      <div class="sq-icon">
+        <i data-lucide="layout-list" style="width: 26px; height: 26px;"></i>
+      </div>
+      <div class="sq-text">
+        <span>Menu Management</span>
+        <small>Edit items, prices & stock</small>
+      </div>
+    </a>
+
     <!-- Scanner Action -->
     <div class="staff-quick-btn" onclick="ScannerApp.openModal()">
       <div class="sq-icon scan">
