@@ -35,7 +35,17 @@ $categories = [
     'desserts'  => '🍰 Desserts',
 ];
 
-$activeCat = $_GET['cat'] ?? 'all';
+$hour = (int)date('H');
+$defaultCat = 'all';
+if ($hour >= 6 && $hour < 11) {
+    $defaultCat = 'breakfast';
+} elseif ($hour >= 11 && $hour < 16) {
+    $defaultCat = 'lunch';
+} elseif ($hour >= 16 && $hour < 21) {
+    $defaultCat = 'snacks';
+}
+
+$activeCat = $_GET['cat'] ?? $defaultCat;
 
 require __DIR__ . '/includes/header.php';
 ?>
@@ -87,7 +97,10 @@ require __DIR__ . '/includes/header.php';
   <div class="menu-grid" id="menu-grid-container">
     <?php foreach ($menuItems as $item): ?>
       <?php 
-        $isSoldOut = (!$item['is_available'] || $item['stock'] <= 0);
+        // Completely hide the item if staff disabled visibility
+        if (!$item['is_available']) continue;
+        
+        $isSoldOut = ($item['stock'] <= 0);
         $rating = round($item['avg_rating'], 1);
         $imgUrl = get_image_url($item['image_url']);
       ?>

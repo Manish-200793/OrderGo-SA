@@ -113,7 +113,7 @@ require __DIR__ . '/../includes/header.php';
             <th>Category</th>
             <th>Price</th>
             <th>Stock</th>
-            <th>Available</th>
+            <th><i data-lucide="eye" style="width: 14px; height: 14px; margin-right: 4px;"></i>Visible on Menu</th>
             <th>Daily Special</th>
             <th style="text-align: right;">Actions</th>
           </tr>
@@ -217,7 +217,7 @@ require __DIR__ . '/../includes/header.php';
 
       <div style="display: flex; gap: 2rem; margin-bottom: 1.5rem;">
         <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; cursor: pointer;">
-          <input type="checkbox" name="is_available" id="form-available" value="1" checked> Available
+          <input type="checkbox" name="is_available" id="form-available" value="1" checked> Visible on Menu
         </label>
         <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; cursor: pointer;">
           <input type="checkbox" name="is_daily_special" id="form-special" value="1"> Daily Special
