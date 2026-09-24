@@ -216,7 +216,7 @@ require __DIR__ . '/../includes/header.php';
       <button class="btn-close" style="color: #000;" onclick="closeSlipModal()"><i data-lucide="x"></i></button>
     </div>
     
-    <div id="slip-printable-area" style="text-align: center; font-family: sans-serif;">
+    <div id="slip-printable-area" style="width: 100%; max-width: 300px; margin: 0 auto; text-align: center; font-family: sans-serif;">
       <h1 style="font-size: 1.5rem; font-weight: 800; margin: 0 0 5px 0;">OrderGo</h1>
       <p style="margin: 0; font-size: 0.9rem; color: #444;">College Canteen</p>
       
@@ -240,7 +240,7 @@ require __DIR__ . '/../includes/header.php';
         <span id="slip-total"></span>
       </div>
       
-      <img id="slip-qr-image" src="" alt="QR Code" style="width: 150px; height: 150px; margin: 0 auto; display: block;" />
+      <img id="slip-qr-image" src="" alt="QR Code" style="width: 130px; height: 130px; margin: 0 auto; display: block;" />
       
       <p style="font-size: 0.8rem; margin-top: 10px; color: #444;">Show this QR at the counter</p>
     </div>
@@ -376,11 +376,13 @@ function closeSlipModal() {
 
 function printSlip() {
   const printContent = document.getElementById('slip-printable-area').innerHTML;
-  const printWindow = window.open('', '', 'width=600,height=800');
+  const printWindow = window.open('', '', 'width=400,height=600');
   printWindow.document.write('<html><head><title>Print Slip</title>');
-  printWindow.document.write('<style>body{font-family:sans-serif;padding:20px;text-align:center;} @media print{body{margin:0;padding:0;}}</style>');
+  printWindow.document.write('<style>body{font-family:sans-serif; margin: 0; padding: 20px; display: flex; justify-content: center;} .receipt{width: 300px; text-align: center;} @media print{body{padding:0;} .receipt{margin: 0 auto;}}</style>');
   printWindow.document.write('</head><body>');
+  printWindow.document.write('<div class="receipt">');
   printWindow.document.write(printContent);
+  printWindow.document.write('</div>');
   printWindow.document.write('</body></html>');
   printWindow.document.close();
   printWindow.focus();
