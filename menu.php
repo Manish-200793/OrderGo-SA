@@ -36,14 +36,7 @@ $categories = [
 ];
 
 $hour = (int)date('H');
-$defaultCat = 'all';
-if ($hour >= 6 && $hour < 11) {
-    $defaultCat = 'breakfast';
-} elseif ($hour >= 11 && $hour < 16) {
-    $defaultCat = 'lunch';
-} elseif ($hour >= 16 && $hour < 21) {
-    $defaultCat = 'snacks';
-}
+$defaultCat = ($hour < 11) ? 'breakfast' : 'all';
 
 $activeCat = $_GET['cat'] ?? $defaultCat;
 
