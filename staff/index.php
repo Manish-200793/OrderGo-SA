@@ -275,7 +275,6 @@ async function submitPosOrder() {
     const data = await res.json();
     if (data.success) {
       Cart.showToast(`POS Order #${data.order.order_id.replace('ORD-','')} placed!`, 'success');
-      window.open('print-ticket.php?id=' + data.order.order_id, '_blank', 'width=400,height=600');
       posCart = [];
       document.getElementById('pos-guest-name').value = '';
       closePOSModal();
