@@ -372,7 +372,7 @@ function printSlip() {
   printWindow.document.write(printContent);
   printWindow.document.write('<script>');
   printWindow.document.write('window.onload = function() { setTimeout(function() { window.print(); window.close(); }, 500); }');
-  printWindow.document.write('</script>');
+  printWindow.document.write('<\\/script>');
   printWindow.document.write('</body></html>');
   printWindow.document.close();
   printWindow.focus();
