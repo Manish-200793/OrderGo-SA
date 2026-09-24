@@ -59,7 +59,7 @@ require __DIR__ . '/../includes/header.php';
 
     <!-- Menu Management Action -->
     <a href="<?= ROOT_PATH ?>/admin/menu.php" class="staff-quick-btn" style="text-decoration: none;">
-      <div class="sq-icon">
+      <div class="sq-icon menu">
         <i data-lucide="layout-list" style="width: 26px; height: 26px;"></i>
       </div>
       <div class="sq-text">

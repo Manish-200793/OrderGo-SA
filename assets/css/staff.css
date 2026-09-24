@@ -57,6 +57,7 @@
 .sq-icon.pos { background: linear-gradient(135deg, #f59e0b, #d97706); }
 .sq-icon.scan { background: linear-gradient(135deg, #10b981, #059669); }
 .sq-icon.monitor { background: linear-gradient(135deg, #3b82f6, #2563eb); }
+.sq-icon.menu { background: linear-gradient(135deg, #8b5cf6, #6d28d9); }
 
 .sq-text span {
   font-size: 1rem;
