@@ -16,6 +16,10 @@ $db = get_db();
 $stmt = $db->query("SELECT * FROM odg_menu_items WHERE is_daily_special = 1 AND is_available = 1 LIMIT 4");
 $specials = $stmt->fetchAll();
 
+// Fetch all available menu items for Surprise Me feature
+$allItemsStmt = $db->query("SELECT item_id, name, description, category, price, stock, image_url, is_available FROM odg_menu_items WHERE is_available = 1");
+$allItems = $allItemsStmt->fetchAll();
+
 require __DIR__ . '/includes/header.php';
 ?>
 
@@ -188,12 +192,165 @@ require __DIR__ . '/includes/header.php';
       <div class="glass-card cta-card">
         <h2>Hungry? Skip the wait today!</h2>
         <p>Browse our fresh campus cafeteria menu and order your favorites now.</p>
-        <a href="<?= ROOT_PATH ?>/menu.php" class="btn btn-primary btn-lg">
-          Browse Canteen Menu <i data-lucide="arrow-right"></i>
+        <a href="<?= ROOT_PATH ?>/menu.php" class="btn btn-primary btn-lg cta-btn">
+          Browse Menu <i data-lucide="arrow-right"></i>
         </a>
       </div>
     </div>
   </section>
 </div>
+
+<?php if (is_logged_in()): ?>
+  <!-- Floating Surprise Me / Budget Roulette Button (Bottom Right) -->
+  <button class="floating-roulette-btn" onclick="openSurpriseModal()" title="Surprise Me! Budget Roulette">
+    <i data-lucide="dices" style="width: 20px; height: 20px;"></i> Surprise Me!
+  </button>
+
+  <!-- Budget Roulette / Surprise Modal -->
+  <div id="surprise-modal" class="modal-overlay" onclick="if(event.target===this) closeSurpriseModal()">
+    <div class="modal-content text-center surprise-modal-content">
+      <div class="modal-header" style="margin-bottom: 0.5rem; justify-content: space-between; align-items: center; display: flex;">
+        <h3 style="font-family: var(--font-display); font-weight: 800; color: var(--accent-primary-hover); display: flex; align-items: center; gap: 0.5rem; margin: 0; font-size: 1.5rem;">
+          🎲 Budget Roulette
+        </h3>
+        <button class="btn-close" onclick="closeSurpriseModal()">&times;</button>
+      </div>
+      <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 0.25rem; margin-bottom: 1.25rem;">
+        Can't decide? Enter your budget and let OrderGo craft the perfect meal combo for you!
+      </p>
+
+      <div style="margin-bottom: 1.25rem; position: relative;">
+        <input type="number" id="surprise-budget" class="form-input text-center" placeholder="Enter Budget (e.g. 100)" value="100" min="20" max="500" style="font-size: 1.5rem; font-weight: 800; text-align: center;">
+      </div>
+
+      <button class="btn btn-primary btn-lg w-full" style="width: 100%; font-weight: 700;" onclick="spinSurpriseRoulette()">
+        Spin the Wheel! 🎰
+      </button>
+
+      <div id="surprise-roulette-result" style="margin-top: 1.25rem; text-align: left;"></div>
+    </div>
+  </div>
+
+  <script>
+    const allMenuItems = <?= json_encode($allItems, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) ?>;
+
+    function openSurpriseModal() {
+      document.getElementById('surprise-modal').classList.add('active');
+    }
+
+    function closeSurpriseModal() {
+      document.getElementById('surprise-modal').classList.remove('active');
+    }
+
+    function spinSurpriseRoulette() {
+      const budget = parseFloat(document.getElementById('surprise-budget').value) || 100;
+      const avail = allMenuItems.filter(i => (i.is_available == 1 || i.is_available === true) && parseInt(i.stock) > 0);
+      const resultDiv = document.getElementById('surprise-roulette-result');
+      resultDiv.innerHTML = '<div style="text-align: center; padding: 1.25rem; color: var(--text-secondary);"><span style="font-size: 1.5rem;">🎲</span><br>Selecting best delicious combo...</div>';
+
+      setTimeout(() => {
+        // Categorize items
+        const mains = avail.filter(i => ['breakfast', 'lunch', 'snacks'].includes(i.category));
+        const bevs = avail.filter(i => i.category === 'beverages');
+        const desserts = avail.filter(i => i.category === 'desserts');
+
+        let validCombos = [];
+
+        // 1. Try 3-item combos (Main + Beverage + Dessert)
+        mains.forEach(m => {
+          bevs.forEach(b => {
+            desserts.forEach(d => {
+              const total = parseFloat(m.price) + parseFloat(b.price) + parseFloat(d.price);
+              if (total <= budget) validCombos.push({ items: [m, b, d], total: total });
+            });
+          });
+        });
+
+        // 2. If no 3-item combo fits, try 2-item combos (Main + Bev OR Main + Dessert)
+        if (validCombos.length === 0) {
+          mains.forEach(m => {
+            bevs.forEach(b => {
+              const total = parseFloat(m.price) + parseFloat(b.price);
+              if (total <= budget) validCombos.push({ items: [m, b], total: total });
+            });
+            desserts.forEach(d => {
+              const total = parseFloat(m.price) + parseFloat(d.price);
+              if (total <= budget) validCombos.push({ items: [m, d], total: total });
+            });
+          });
+        }
+
+        // 3. If still nothing fits, just find single items within budget
+        if (validCombos.length === 0) {
+          avail.forEach(m => {
+            const total = parseFloat(m.price);
+            if (total <= budget) validCombos.push({ items: [m], total: total });
+          });
+        }
+
+        if (validCombos.length === 0) {
+          resultDiv.innerHTML = `<div style="color: #dc2626; padding: 1rem; text-align: center; font-weight: 600;">No items found within budget of ₹${budget}. Try increasing your budget!</div>`;
+          return;
+        }
+
+        // Sort valid combos by total price descending (closest to budget first)
+        validCombos.sort((a, b) => b.total - a.total);
+
+        // Filter top combos within ₹25 of best price (max 25 pool)
+        const bestPrice = validCombos[0].total;
+        const topCombos = validCombos.filter(c => c.total >= bestPrice - 25).slice(0, 25);
+        
+        // Prevent repeating the same items from the last spin
+        window.lastRouletteItems = window.lastRouletteItems || [];
+        
+        topCombos.forEach(c => {
+          c.overlap = c.items.filter(i => window.lastRouletteItems.includes(i.item_id)).length;
+        });
+
+        topCombos.sort((a, b) => a.overlap - b.overlap);
+        const minOverlap = topCombos[0].overlap;
+        const bestFreshCombos = topCombos.filter(c => c.overlap === minOverlap);
+
+        const bestCombo = bestFreshCombos[Math.floor(Math.random() * bestFreshCombos.length)];
+        const combo = bestCombo.items;
+        const spent = bestCombo.total;
+        
+        window.lastRouletteItems = combo.map(i => i.item_id);
+
+        const comboJson = JSON.stringify(combo).replace(/"/g, '&quot;');
+
+        resultDiv.innerHTML = `
+          <div class="glass-card" style="padding: 1rem; border: 1.5px solid var(--accent-primary); border-radius: var(--radius-lg);">
+            <h4 style="color: var(--accent-primary); margin-bottom: 0.5rem; font-weight: 700;">🎉 Chef's Special Combo:</h4>
+            <ul style="margin-bottom: 0.75rem; padding: 0; list-style: none;">
+              ${combo.map(i => `<li style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; font-size:0.9rem; color: var(--text-primary);"><span>${i.name}</span><strong>₹${parseFloat(i.price).toFixed(0)}</strong></li>`).join('')}
+            </ul>
+            <div style="display: flex; justify-content: space-between; border-top: 1px solid var(--border-subtle); padding-top: 0.5rem; font-weight: 800; font-size: 1rem; color: var(--text-primary);">
+              <span>Total Spent:</span>
+              <span style="color: var(--accent-primary);">₹${spent.toFixed(0)}</span>
+            </div>
+            <button class="btn btn-primary btn-sm w-full" style="width: 100%; margin-top: 0.75rem; font-weight: 700;" onclick="addSurpriseComboToCart(${comboJson})">
+              Add Combo to Cart 🛒
+            </button>
+          </div>
+        `;
+      }, 400);
+    }
+
+    function addSurpriseComboToCart(combo) {
+      if (Array.isArray(combo) && window.Cart) {
+        combo.forEach(item => {
+          Cart.addItem({
+            item_id: parseInt(item.item_id),
+            name: item.name,
+            price: parseFloat(item.price),
+            image_url: item.image_url
+          });
+        });
+        closeSurpriseModal();
+      }
+    }
+  </script>
+<?php endif; ?>
 
 <?php require __DIR__ . '/includes/footer.php'; ?>

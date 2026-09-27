@@ -214,9 +214,6 @@ require __DIR__ . '/includes/header.php';
             <input type="email" id="email" name="email" class="form-input" placeholder="student@college.edu" required autofocus style="padding-left: 2.5rem;">
             <i data-lucide="mail" style="position: absolute; left: 0.85rem; top: 50%; transform: translateY(-50%); width: 16px; height: 16px; color: var(--text-muted, #94a3b8);"></i>
           </div>
-          <small style="color: var(--text-muted, #94a3b8); font-size: 0.78rem; display: block; margin-top: 0.35rem;">
-            A secure verification code will be sent from <strong>admin@specanciens.com</strong>.
-          </small>
         </div>
 
         <button type="submit" id="btn-send" class="btn btn-primary btn-lg w-full">
@@ -226,24 +223,26 @@ require __DIR__ . '/includes/header.php';
 
     <!-- STEP 2: Enter Verification Code -->
     <?php elseif ($step === 2): ?>
-      <div style="background: var(--bg-surface, rgba(255,255,255,0.04)); border: 1px solid var(--border-subtle, rgba(255,255,255,0.08)); border-radius: var(--radius-md, 8px); padding: 0.85rem 1rem; margin-bottom: 1.5rem; font-size: 0.85rem; display: flex; align-items: center; justify-content: space-between;">
-        <div>
-          <span style="color: var(--text-muted, #94a3b8);">Recipient:</span>
-          <strong><?= htmlspecialchars($_SESSION['reset_email'] ?? '') ?></strong>
-        </div>
-        <a href="<?= ROOT_PATH ?>/forgot-password.php?restart=1" style="font-size: 0.8rem; color: var(--accent-primary, #f97316); text-decoration: underline;">
-          Change
-        </a>
-      </div>
-
       <form method="POST" action="">
         <input type="hidden" name="action" value="verify_code">
         
-        <div class="form-group" style="margin-bottom: 1.5rem;">
-          <label class="form-label text-center" for="code" style="display: block;">Enter 6-Digit Code</label>
-          <input type="text" id="code" name="code" class="form-input text-center" placeholder="••••••" maxlength="6" pattern="[0-9]{6}" inputmode="numeric" autocomplete="one-time-code" style="letter-spacing: 8px; font-size: 1.8rem; font-weight: 800; padding: 0.6rem 0;" required autofocus>
-          <small style="color: var(--text-muted, #94a3b8); font-size: 0.78rem; text-align: center; display: block; margin-top: 0.4rem;">
-            Code expires in 10 minutes. Check spam or junk folder if not seen.
+        <div class="form-group" style="margin-bottom: 1.5rem; text-align: center;">
+          <label class="form-label text-center" for="code" style="display: block; margin-bottom: 0.75rem;">Enter 6-Digit Code</label>
+          
+          <div class="otp-input-wrapper">
+            <input type="text" id="code" name="code" class="otp-hidden-input" maxlength="6" pattern="[0-9]{6}" inputmode="numeric" autocomplete="one-time-code" required autofocus>
+            <div class="otp-boxes-grid" onclick="document.getElementById('code').focus()">
+              <div class="otp-box" data-index="0">•</div>
+              <div class="otp-box" data-index="1">•</div>
+              <div class="otp-box" data-index="2">•</div>
+              <div class="otp-box" data-index="3">•</div>
+              <div class="otp-box" data-index="4">•</div>
+              <div class="otp-box" data-index="5">•</div>
+            </div>
+          </div>
+
+          <small style="color: var(--text-muted, #94a3b8); font-size: 0.78rem; text-align: center; display: block; margin-top: 0.75rem;">
+            OTP will expire in 10 minutes
           </small>
         </div>
 
@@ -276,8 +275,11 @@ require __DIR__ . '/includes/header.php';
         <div class="form-group" style="margin-bottom: 1.5rem;">
           <label class="form-label" for="confirm_password">Confirm New Password</label>
           <div style="position: relative;">
-            <input type="password" id="confirm_password" name="confirm_password" class="form-input" placeholder="Repeat new password" minlength="6" required style="padding-left: 2.5rem;">
+            <input type="password" id="confirm_password" name="confirm_password" class="form-input" placeholder="Repeat new password" minlength="6" required style="padding-left: 2.5rem; padding-right: 2.5rem;">
             <i data-lucide="lock-check" style="position: absolute; left: 0.85rem; top: 50%; transform: translateY(-50%); width: 16px; height: 16px; color: var(--text-muted, #94a3b8);"></i>
+            <button type="button" class="toggle-password-btn" data-target="confirm_password" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--text-muted); padding: 4px; display: flex; align-items: center; justify-content: center;" title="Toggle Password Visibility">
+              <i data-lucide="eye" style="width: 18px; height: 18px;"></i>
+            </button>
           </div>
         </div>
 
@@ -313,5 +315,61 @@ require __DIR__ . '/includes/header.php';
 
   </div>
 </div>
+
+<script>
+// OTP Box Live Updates & Dot Alignment
+const codeInput = document.getElementById('code');
+if (codeInput) {
+  const boxes = document.querySelectorAll('.otp-box');
+  
+  function updateOtpBoxes() {
+    const val = codeInput.value.replace(/[^0-9]/g, '').slice(0, 6);
+    codeInput.value = val;
+    boxes.forEach((box, i) => {
+      if (i < val.length) {
+        box.textContent = val[i];
+        box.classList.add('filled');
+        box.classList.remove('active');
+      } else {
+        box.textContent = '•';
+        box.classList.remove('filled');
+        if (i === val.length) {
+          box.classList.add('active');
+        } else {
+          box.classList.remove('active');
+        }
+      }
+    });
+  }
+
+  codeInput.addEventListener('input', updateOtpBoxes);
+  codeInput.addEventListener('focus', updateOtpBoxes);
+  codeInput.addEventListener('blur', () => {
+    boxes.forEach(b => b.classList.remove('active'));
+  });
+  updateOtpBoxes();
+}
+
+// Password Eye Toggle Feature for Step 3
+document.querySelectorAll('.toggle-password-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    const targetId = this.getAttribute('data-target');
+    const input = document.getElementById(targetId);
+    const icon = this.querySelector('i');
+    if (input) {
+      if (input.type === 'password') {
+        input.type = 'text';
+        icon.setAttribute('data-lucide', 'eye-off');
+      } else {
+        input.type = 'password';
+        icon.setAttribute('data-lucide', 'eye');
+      }
+      if (typeof lucide !== 'undefined') {
+        lucide.createIcons();
+      }
+    }
+  });
+});
+</script>
 
 <?php require __DIR__ . '/includes/footer.php'; ?>

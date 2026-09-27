@@ -54,9 +54,9 @@ $currentScript = basename($_SERVER['SCRIPT_NAME'] ?? '');
       <?php endif; ?>
 
       <!-- Theme Toggle -->
-      <button class="nav-link" onclick="toggleTheme()" title="Toggle Dark/Light Mode" style="border:none; background:none; cursor:pointer;">
-        <i data-lucide="sun" id="theme-icon-sun" style="width: 16px; height: 16px; display: none;"></i>
-        <i data-lucide="moon" id="theme-icon-moon" style="width: 16px; height: 16px; display: none;"></i>
+      <button class="nav-link" onclick="toggleTheme()" title="Toggle Dark/Light Mode" aria-label="Toggle Theme" style="border:none; background:none; cursor:pointer;">
+        <i data-lucide="sun" class="theme-icon-sun" style="width: 16px; height: 16px; display: none;"></i>
+        <i data-lucide="moon" class="theme-icon-moon" style="width: 16px; height: 16px; display: none;"></i>
       </button>
 
       <!-- Auth Section -->
@@ -90,6 +90,14 @@ $currentScript = basename($_SERVER['SCRIPT_NAME'] ?? '');
           <a href="<?= ROOT_PATH ?>/register.php" class="btn btn-primary btn-sm">Sign Up</a>
         </div>
       <?php endif; ?>
+    </div>
+
+    <!-- Mobile Header Actions (Theme Toggle for Phone View) -->
+    <div class="mobile-header-actions">
+      <button class="mobile-theme-btn" onclick="toggleTheme()" title="Toggle Dark/Light Mode" aria-label="Toggle Theme">
+        <i data-lucide="sun" class="theme-icon-sun" style="width: 18px; height: 18px; display: none;"></i>
+        <i data-lucide="moon" class="theme-icon-moon" style="width: 18px; height: 18px; display: none;"></i>
+      </button>
     </div>
   </div>
 </nav>
@@ -157,17 +165,10 @@ function toggleTheme() {
 }
 
 function updateThemeIcons(theme) {
-  const sun = document.getElementById('theme-icon-sun');
-  const moon = document.getElementById('theme-icon-moon');
-  if (sun && moon) {
-    if (theme === 'dark') {
-      sun.style.display = 'inline-block';
-      moon.style.display = 'none';
-    } else {
-      sun.style.display = 'none';
-      moon.style.display = 'inline-block';
-    }
-  }
+  const suns = document.querySelectorAll('.theme-icon-sun');
+  const moons = document.querySelectorAll('.theme-icon-moon');
+  suns.forEach(el => el.style.display = (theme === 'dark' ? 'inline-block' : 'none'));
+  moons.forEach(el => el.style.display = (theme === 'dark' ? 'none' : 'inline-block'));
 }
 
 document.addEventListener('DOMContentLoaded', () => {

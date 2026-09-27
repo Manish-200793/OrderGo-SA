@@ -144,9 +144,30 @@
 
 .cta-section { padding: var(--space-3xl) 0; }
 .cta-card {
-  padding: var(--space-3xl);
+  padding: var(--space-3xl) var(--space-xl);
   background: linear-gradient(135deg, var(--accent-tint) 0%, var(--accent-subtle) 100%);
   border: 1px solid var(--border-accent);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: var(--radius-xl);
+}
+
+.cta-card h2 {
+  margin-bottom: var(--space-xs);
+}
+
+.cta-card p {
+  margin-bottom: var(--space-md);
+  color: var(--text-secondary);
+}
+
+.cta-btn {
+  margin-top: var(--space-sm);
+  padding: 0.75rem 1.6rem;
+  width: auto;
+  max-width: fit-content;
+  align-self: center;
 }
 
 @media (max-width: 1024px) {
@@ -162,4 +183,16 @@
   .features-grid { grid-template-columns: 1fr; }
   .hero-actions { flex-direction: column; }
   .hero-stats { flex-wrap: wrap; justify-content: center; }
+  .cta-section { padding: var(--space-xl) 0; }
+  .cta-card { padding: var(--space-xl) var(--space-md); }
+  .cta-btn {
+    padding: 0.65rem 1.25rem;
+    font-size: var(--font-size-sm);
+  }
+}
+
+/* Surprise Modal Styling */
+.surprise-modal-content {
+  max-width: 450px !important;
+  padding: 1.5rem;
 }
