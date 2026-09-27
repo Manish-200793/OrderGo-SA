@@ -45,8 +45,8 @@ require __DIR__ . '/includes/header.php';
 
 <div class="page container">
   <div class="page-header" style="margin-bottom: 2rem;">
-    <h1 class="page-title" style="font-size: 2.25rem; font-weight: 800; color: #0f172a; margin-bottom: 0.5rem;">Our Menu</h1>
-    <p class="page-subtitle" style="color: #64748b; font-size: 1.1rem;">Fresh, delicious food made with love</p>
+    <h1 class="page-title" style="font-size: 2.25rem; font-weight: 800; color: var(--text-primary); margin-bottom: 0.5rem;">Our Menu</h1>
+    <p class="page-subtitle" style="color: var(--text-secondary); font-size: 1.1rem;">Fresh, delicious food made with love</p>
   </div>
 
   <?php if (!is_logged_in()): ?>
@@ -82,7 +82,7 @@ require __DIR__ . '/includes/header.php';
   </div>
 
   <!-- Section Title -->
-  <h2 style="font-size: 1.25rem; font-weight: 700; color: #0f172a; margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.5rem;">
+  <h2 style="font-size: 1.25rem; font-weight: 700; color: var(--text-primary); margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.5rem;">
     <i data-lucide="sparkles" style="width: 20px; height: 20px;"></i> Recommended For You
   </h2>
 

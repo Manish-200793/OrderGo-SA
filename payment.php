@@ -54,8 +54,10 @@ require __DIR__ . '/includes/header.php';
       <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.5rem;">Scan using GPay, PhonePe, or Paytm</p>
     </div>
 
-    <button id="btn-pay-now" class="btn btn-primary btn-lg w-full" onclick="confirmPayment('<?= $order['order_id'] ?>')">
-      Simulate Successful Payment <i data-lucide="check-circle-2"></i>
+    <button id="btn-pay-now" class="btn btn-primary btn-lg w-full" style="width: 100%;" onclick="confirmPayment('<?= $order['order_id'] ?>')">
+      <span class="hide-on-mobile">Simulate Successful Payment</span>
+      <span class="show-on-mobile">Simulate Payment</span>
+      <i data-lucide="check-circle-2"></i>
     </button>
 
     <div style="margin-top: 1rem;">
@@ -68,7 +70,7 @@ require __DIR__ . '/includes/header.php';
 async function confirmPayment(orderId) {
   const btn = document.getElementById('btn-pay-now');
   btn.disabled = true;
-  btn.textContent = 'Verifying Transaction...';
+  btn.innerHTML = 'Verifying... <i data-lucide="loader"></i>';
 
   try {
     const url = typeof apiUrl === 'function' ? apiUrl(`orders.php?action=pay&id=${orderId}`) : `/api/orders.php?action=pay&id=${orderId}`;
@@ -79,11 +81,14 @@ async function confirmPayment(orderId) {
     } else {
       alert(data.error || 'Payment confirmation failed');
       btn.disabled = false;
-      btn.textContent = 'Try Again';
+      btn.innerHTML = '<span class="hide-on-mobile">Simulate Successful Payment</span><span class="show-on-mobile">Simulate Payment</span> <i data-lucide="check-circle-2"></i>';
+      if (window.lucide) lucide.createIcons();
     }
   } catch (e) {
     alert('Network error');
     btn.disabled = false;
+    btn.innerHTML = '<span class="hide-on-mobile">Simulate Successful Payment</span><span class="show-on-mobile">Simulate Payment</span> <i data-lucide="check-circle-2"></i>';
+    if (window.lucide) lucide.createIcons();
   }
 }
 </script>

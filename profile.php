@@ -115,11 +115,11 @@ require __DIR__ . '/includes/header.php';
         </div>
       </div>
 
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem;">
+      <div class="profile-actions">
         <a href="<?= ROOT_PATH ?>/logout.php" class="btn btn-danger btn-sm">
           <i data-lucide="log-out"></i> Log Out
         </a>
-        <button type="submit" class="btn btn-primary btn-md">
+        <button type="submit" class="btn btn-primary btn-sm">
           Save Changes <i data-lucide="check"></i>
         </button>
       </div>
