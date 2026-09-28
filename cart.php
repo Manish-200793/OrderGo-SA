@@ -17,7 +17,7 @@ require __DIR__ . '/includes/header.php';
 ?>
 
 <div class="page container">
-  <div class="page-header">
+  <div class="page-header">00001
     <h1 class="page-title">Your Tray</h1>
     <p class="page-subtitle">Review items and confirm pickup payment</p>
   </div>
@@ -159,8 +159,8 @@ async function handleCheckout() {
 
     const data = await res.json();
     if (data.success && data.order) {
-      Cart.clear();
       if (selectedPayment === 'cash') {
+        Cart.clear();
         window.location.href = `order-detail.php?id=${data.order.order_id}`;
       } else {
         window.location.href = `payment.php?id=${data.order.order_id}`;

@@ -77,6 +77,7 @@ async function confirmPayment(orderId) {
     const res = await fetch(url, { method: 'POST' });
     const data = await res.json();
     if (data.success) {
+      localStorage.removeItem('ordergo_cart');
       window.location.href = `order-detail.php?id=${orderId}`;
     } else {
       alert(data.error || 'Payment confirmation failed');
