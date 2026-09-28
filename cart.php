@@ -17,7 +17,7 @@ require __DIR__ . '/includes/header.php';
 ?>
 
 <div class="page container">
-  <div class="page-header">00001
+  <div class="page-header">
     <h1 class="page-title">Your Tray</h1>
     <p class="page-subtitle">Review items and confirm pickup payment</p>
   </div>
