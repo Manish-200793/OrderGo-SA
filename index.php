@@ -266,27 +266,23 @@ require __DIR__ . '/includes/header.php';
           });
         });
 
-        // 2. If no 3-item combo fits, try 2-item combos (Main + Bev OR Main + Dessert)
-        if (validCombos.length === 0) {
-          mains.forEach(m => {
-            bevs.forEach(b => {
-              const total = parseFloat(m.price) + parseFloat(b.price);
-              if (total <= budget) validCombos.push({ items: [m, b], total: total });
-            });
-            desserts.forEach(d => {
-              const total = parseFloat(m.price) + parseFloat(d.price);
-              if (total <= budget) validCombos.push({ items: [m, d], total: total });
-            });
+        // 2. Try 2-item combos (Main + Bev OR Main + Dessert)
+        mains.forEach(m => {
+          bevs.forEach(b => {
+            const total = parseFloat(m.price) + parseFloat(b.price);
+            if (total <= budget) validCombos.push({ items: [m, b], total: total });
           });
-        }
+          desserts.forEach(d => {
+            const total = parseFloat(m.price) + parseFloat(d.price);
+            if (total <= budget) validCombos.push({ items: [m, d], total: total });
+          });
+        });
 
-        // 3. If still nothing fits, just find single items within budget
-        if (validCombos.length === 0) {
-          avail.forEach(m => {
-            const total = parseFloat(m.price);
-            if (total <= budget) validCombos.push({ items: [m], total: total });
-          });
-        }
+        // 3. Just find single items within budget
+        avail.forEach(m => {
+          const total = parseFloat(m.price);
+          if (total <= budget) validCombos.push({ items: [m], total: total });
+        });
 
         if (validCombos.length === 0) {
           resultDiv.innerHTML = `<div style="color: #dc2626; padding: 1rem; text-align: center; font-weight: 600;">No items found within budget of ₹${budget}. Try increasing your budget!</div>`;
