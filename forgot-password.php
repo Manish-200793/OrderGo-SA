@@ -71,7 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if ($mailRes['success']) {
                     $_SESSION['reset_step'] = 2;
                     $step = 2;
-                    $msg = "A 6-digit verification code has been sent to <strong>" . htmlspecialchars($email) . "</strong>. Please check your inbox (and spam folder).";
+                    $msg = "otp has been sent to your mail";
                 } else {
                     $err = "Failed to dispatch verification email. Error: " . htmlspecialchars($mailRes['error'] ?? 'SMTP error');
                 }
