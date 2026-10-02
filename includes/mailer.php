@@ -198,109 +198,88 @@ function send_password_reset_email(string $email, string $name, string $code): a
     body {
       margin: 0;
       padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-      background-color: #0B0F19;
-      color: #E2E8F0;
+      font-family: Arial, Helvetica, sans-serif;
+      background-color: #f8f9fa;
+      color: #333333;
     }
     .email-wrapper {
       width: 100%;
-      background-color: #0B0F19;
+      background-color: #f8f9fa;
       padding: 40px 15px;
       box-sizing: border-box;
     }
     .email-container {
-      max-width: 520px;
+      max-width: 500px;
       margin: 0 auto;
-      background: #151C2C;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 16px;
+      background: #ffffff;
+      border: 1px solid #e9ecef;
+      border-radius: 8px;
       overflow: hidden;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
     }
     .email-header {
-      background: linear-gradient(135deg, #EA580C 0%, #F97316 50%, #FB923C 100%);
-      padding: 32px 24px;
+      background-color: #f8f9fa;
+      padding: 24px;
       text-align: center;
-    }
-    .logo-badge {
-      display: inline-block;
-      background: rgba(255, 255, 255, 0.2);
-      padding: 8px 18px;
-      border-radius: 9999px;
-      color: #ffffff;
-      font-size: 14px;
-      font-weight: 700;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      margin-bottom: 8px;
-      backdrop-filter: blur(4px);
+      border-bottom: 1px solid #e9ecef;
     }
     .header-title {
       margin: 0;
-      color: #ffffff;
-      font-size: 26px;
-      font-weight: 800;
-      letter-spacing: -0.5px;
+      color: #ea580c;
+      font-size: 22px;
+      font-weight: bold;
     }
     .email-body {
-      padding: 36px 28px;
-      color: #CBD5E1;
+      padding: 30px;
       line-height: 1.6;
       font-size: 15px;
     }
     .greeting {
-      font-size: 18px;
-      font-weight: 700;
-      color: #FFFFFF;
+      font-size: 16px;
+      font-weight: bold;
+      color: #1a1a1a;
       margin-top: 0;
-      margin-bottom: 12px;
+      margin-bottom: 15px;
     }
     .code-card {
-      background: #0B0F19;
-      border: 1.5px dashed #F97316;
-      border-radius: 12px;
-      padding: 24px 16px;
+      background: #f8f9fa;
+      border: 1px solid #e9ecef;
+      border-radius: 6px;
+      padding: 20px;
       text-align: center;
-      margin: 28px 0;
+      margin: 25px 0;
     }
     .code-label {
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: 1.5px;
-      color: #94A3B8;
-      margin-bottom: 10px;
-      font-weight: 600;
+      font-size: 13px;
+      color: #666666;
+      margin-bottom: 8px;
     }
     .code-digits {
-      font-family: 'SF Mono', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
-      font-size: 38px;
-      font-weight: 800;
-      letter-spacing: 8px;
-      color: #F97316;
+      font-size: 32px;
+      font-weight: bold;
+      letter-spacing: 4px;
+      color: #333333;
       margin: 0;
     }
     .notice-box {
-      background: rgba(249, 115, 22, 0.08);
-      border-left: 4px solid #F97316;
-      border-radius: 6px;
-      padding: 14px 18px;
-      margin: 24px 0 10px 0;
-      font-size: 13px;
-      color: #E2E8F0;
-    }
-    .email-footer {
-      background: #0B0F19;
-      padding: 24px 28px;
-      text-align: center;
-      border-top: 1px solid rgba(255, 255, 255, 0.05);
-      font-size: 12px;
-      color: #64748B;
-      line-height: 1.5;
+      font-size: 14px;
+      color: #555555;
+      margin: 20px 0;
     }
     .security-note {
       font-size: 13px;
-      color: #94A3B8;
+      color: #777777;
       margin-top: 20px;
+      border-top: 1px solid #e9ecef;
+      padding-top: 15px;
+    }
+    .email-footer {
+      background: #f8f9fa;
+      padding: 20px;
+      text-align: center;
+      font-size: 12px;
+      color: #888888;
+      border-top: 1px solid #e9ecef;
     }
   </style>
 </head>
@@ -308,33 +287,31 @@ function send_password_reset_email(string $email, string $name, string $code): a
   <div class="email-wrapper">
     <div class="email-container">
       <div class="email-header">
-        <div class="logo-badge">OrderGo Canteen</div>
-        <h1 class="header-title">Password Recovery</h1>
+        <h1 class="header-title">OrderGo</h1>
       </div>
       
       <div class="email-body">
-        <p class="greeting">Hello, {$displayName}!</p>
-        <p>We received a request to reset your password for your <strong>OrderGo</strong> campus dining account.</p>
-        <p>Use the 6-digit verification code below to complete your password reset:</p>
+        <p class="greeting">Hello, {\$displayName},</p>
+        <p>We received a request to reset the password for your OrderGo account.</p>
+        <p>Please use the verification code below to complete your password reset process:</p>
         
         <div class="code-card">
-          <div class="code-label">Your 6-Digit Verification Code</div>
-          <div class="code-digits">{$code}</div>
+          <div class="code-label">Verification Code</div>
+          <div class="code-digits">{\$code}</div>
         </div>
         
         <div class="notice-box">
-          ⏰ <strong>Code Expiration:</strong> This code is valid for <strong>10 minutes</strong>. Do not share this code with anyone.
+          This code is valid for <strong>10 minutes</strong>. Please do not share this code with anyone.
         </div>
         
         <p class="security-note">
-          If you did not request this password reset, please ignore this email. Your current password remains safe and unchanged.
+          If you did not request a password reset, you can safely ignore this email. Your account remains secure.
         </p>
       </div>
       
       <div class="email-footer">
-        <div><strong>OrderGo</strong> • Smart Campus Canteen Management System</div>
-        <div>Automated notification sent from <a href="mailto:admin@specanciens.com" style="color: #F97316; text-decoration: none;">admin@specanciens.com</a></div>
-        <div style="margin-top: 8px;">&copy; 2026 OrderGo. All rights reserved.</div>
+        <div>OrderGo Campus Dining System</div>
+        <div style="margin-top: 5px;">&copy; 2026 OrderGo. All rights reserved.</div>
       </div>
     </div>
   </div>
