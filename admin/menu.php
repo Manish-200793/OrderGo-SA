@@ -146,16 +146,18 @@ require __DIR__ . '/../includes/header.php';
                 <input type="checkbox" <?= $item['is_daily_special'] ? 'checked' : '' ?> onchange="toggleItemSetting(<?= $item['item_id'] ?>, 'special', this.checked)">
               </td>
               <td style="text-align: right;">
-                <button class="btn btn-secondary btn-sm" onclick='openEditModal(<?= json_encode($item) ?>)'>
-                  <i data-lucide="edit"></i>
-                </button>
-                <form method="POST" action="" style="display: inline;" onsubmit="return confirm('Delete <?= addslashes($item['name']) ?> from menu?')">
-                  <input type="hidden" name="action" value="delete">
-                  <input type="hidden" name="item_id" value="<?= $item['item_id'] ?>">
-                  <button type="submit" class="btn btn-danger btn-sm">
-                    <i data-lucide="trash-2"></i>
+                <div style="display: flex; align-items: center; justify-content: flex-end; gap: 0.4rem;">
+                  <button class="btn btn-secondary btn-sm" onclick='openEditModal(<?= json_encode($item) ?>)' title="Edit">
+                    <i data-lucide="edit"></i>
                   </button>
-                </form>
+                  <form method="POST" action="" style="display: contents;" onsubmit="return confirm('Delete <?= addslashes($item['name']) ?> from menu?')">
+                    <input type="hidden" name="action" value="delete">
+                    <input type="hidden" name="item_id" value="<?= $item['item_id'] ?>">
+                    <button type="submit" class="btn btn-danger btn-sm" title="Delete">
+                      <i data-lucide="trash-2"></i>
+                    </button>
+                  </form>
+                </div>
               </td>
             </tr>
           <?php endforeach; ?>
