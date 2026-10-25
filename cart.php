@@ -56,23 +56,22 @@ require __DIR__ . '/includes/header.php';
       </div>
 
       <div style="margin-top: 1.5rem;">
-        <label class="payment-title">Payment Option</label>
+        <label class="payment-title">Payment Method</label>
         <div class="payment-methods">
           <div class="payment-option active" id="pay-upi" onclick="selectPayment('upi')">
             <input type="radio" name="payment_method" value="upi" checked style="display: none;">
-            <i data-lucide="smartphone" style="width: 20px; height: 20px; color: var(--accent-primary);"></i>
+            <i data-lucide="shield-check" style="width: 20px; height: 20px; color: var(--accent-primary);"></i>
             <div>
-              <strong>Instant UPI / QR</strong>
-              <small>Pay online via GPay, PhonePe, Paytm</small>
+              <strong>Instant Online UPI / Gateway</strong>
+              <small>Pay via GPay, PhonePe, Paytm or UPI QR</small>
             </div>
           </div>
-
         </div>
       </div>
 
       <?php if ($isLoggedIn): ?>
         <button id="btn-checkout" class="btn btn-primary btn-lg w-full" onclick="handleCheckout()">
-          Place Order <i data-lucide="arrow-right"></i>
+          Proceed to Payment <i data-lucide="arrow-right"></i>
         </button>
       <?php else: ?>
         <a href="<?= ROOT_PATH ?>/login.php?redirect=cart.php" class="btn btn-primary btn-lg w-full text-center">
@@ -88,8 +87,8 @@ let selectedPayment = 'upi';
 
 function selectPayment(method) {
   selectedPayment = method;
-  document.getElementById('pay-upi').classList.toggle('active', method === 'upi');
-  document.getElementById('pay-cash').classList.toggle('active', method === 'cash');
+  const upiEl = document.getElementById('pay-upi');
+  if (upiEl) upiEl.classList.toggle('active', method === 'upi');
 }
 
 function renderCart() {

@@ -59,3 +59,10 @@ define('SMTP_USER', getenv('SMTP_USER') ?: 'admin@specanciens.com');
 define('SMTP_PASS', getenv('SMTP_PASS') ?: 'QU6Sob0doq@1');
 define('EMAIL_FROM', getenv('EMAIL_FROM') ?: 'admin@specanciens.com');
 define('EMAIL_FROM_NAME', getenv('EMAIL_FROM_NAME') ?: 'OrderGo Canteen');
+
+// Razorpay Payment Gateway Configuration (Sandbox / Test Mode)
+define('RAZORPAY_KEY_ID', getenv('RAZORPAY_KEY_ID') ?: 'rzp_test_Ts6k56uxU64AlS');
+define('RAZORPAY_KEY_SECRET', getenv('RAZORPAY_KEY_SECRET') ?: 'xfKPQFVc3MS2TRQLdtdPNJnZ');
+define('RAZORPAY_CURRENCY', 'INR');
+define('PAYMENT_MODE', 'test'); // 'test' for demo sandbox, 'live' for production
+

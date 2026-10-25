@@ -183,7 +183,7 @@ const StaffApp = {
           </div>
 
           <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; color: var(--text-secondary);">
-            <span>Total: <strong>₹${totalPrice}</strong> (${paymentMethod})</span>
+            <span>Total: <strong>₹${totalPrice}</strong> (${paymentMethod}) ${order.payment_status === 'success' ? '<span style="color:#10b981; font-weight:700; font-size:0.75rem; background:rgba(16,185,129,0.12); padding:2px 6px; border-radius:4px; margin-left:4px; border:1px solid rgba(16,185,129,0.3);">✓ PAID</span>' : ''}</span>
             <span style="font-size: 0.75rem; color: var(--text-muted);">${timeFormatted}</span>
           </div>
 
